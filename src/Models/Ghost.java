@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 
 /**
  * Fantasma.
+ *
  * @author krthr
  */
 public class Ghost {
@@ -26,12 +27,12 @@ public class Ghost {
     public int currentDirection;
 
     /**
-     * 
+     *
      * @param x Posicion en x
      * @param y Posicion en y
      * @param vx Velocidad en x
      * @param vy Velocidad en y
-     * @param path 
+     * @param path
      */
     public Ghost(int x, int y, int vx, int vy, String path) {
         this.path = path;
@@ -114,10 +115,11 @@ public class Ghost {
     public void draw(Graphics g) {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
     }
-    
+
     /**
      * Obtener la futura posición del fantasma.
-     * @return 
+     *
+     * @return
      */
     public Point getNextPos() {
         Point temp = null;
@@ -138,14 +140,22 @@ public class Ghost {
                 temp = new Point(x, y + vy);
                 break;
         }
-        
+
         return temp;
     }
-    
+
+    /**
+     * Obtener posición en x
+     * @return 
+     */
     public int X() {
         return x;
     }
-    
+
+    /**
+     * Obtener posición en y
+     * @return 
+     */
     public int Y() {
         return y;
     }

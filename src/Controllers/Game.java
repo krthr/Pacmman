@@ -5,12 +5,15 @@ import Models.Ghost;
 import Models.Pacman;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
@@ -40,10 +43,21 @@ public class Game extends Canvas {
      */
     public Game(int w, int h) throws Exception {
         this.setSize(w, h);
-        initKeyBoard();
-        loadData();
-        loadMainThread();
-        loadGhostsThread();
+
+        EventQueue.invokeLater(() -> {
+
+            try {
+                initKeyBoard();
+                loadData();
+                loadMainThread();
+                loadGhostsThread();
+            } catch (Exception ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            MAIN.start();
+            GHOSTS_THREAD.start();
+        });
     }
 
     /**
@@ -57,12 +71,14 @@ public class Game extends Canvas {
         GHOSTS = new Ghost[2];
         GHOSTS[0] = new Ghost(50, 50, 2, 2, "Ghost1");
         GHOSTS[1] = new Ghost(getWidth() - 50, getHeight() - 50, 2, 2, "Ghost2");
-        for (int i = 0; i < 2; i++) GHOSTS[i].loadPics(i);
+        for (int i = 0; i < 2; i++) {
+            GHOSTS[i].loadPics(i);
+        }
 
         String[] names = {"arriba", "der", "abajo", "izq"};
         PACMAN = new Pacman(getWidth() / 2, getHeight() / 2, 2, 2, "Pacman");
         PACMAN.loadPics(names);
-        
+
         MAP = LEVEL1;
         PRO_X = 900 / 18;
         PRO_Y = 600 / 10;
@@ -159,7 +175,7 @@ public class Game extends Canvas {
 
                     Point temp = PACMAN.getNextPos();
                     verChoquePared(temp.x, temp.y);
-                    
+
                     switch (PACMAN.currentDirection) {
                         case Pacman.RIGTH: {
                             PACMAN.moveRigth(currentTime);
@@ -261,20 +277,21 @@ public class Game extends Canvas {
 
     /**
      * Comprobar si hay un choque con la pared.
-     * @param x
-     * @param y 
-     */
-    private void verChoquePared(int x, int y) {
- 
-    }
-    
-    /**
-     * 
+     *
      * @param x
      * @param y
-     * @return 
+     */
+    private void verChoquePared(int x, int y) {
+        // TODO
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
      */
     private void verChoqueGhost(int x, int y) {
-        
+        // TODO
     }
 }

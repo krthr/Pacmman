@@ -6,6 +6,7 @@ import java.awt.Point;
 import javax.swing.ImageIcon;
 
 /**
+ * Modelo de Pacman.
  *
  * @author krthr
  */
@@ -27,6 +28,7 @@ public class Pacman {
     public int currentDirection;
 
     /**
+     * Pacman.
      *
      * @param x Posicion en x
      * @param y Posicion en y
@@ -118,17 +120,28 @@ public class Pacman {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
     }
 
+    /**
+     * Obtener posición en X
+     *
+     * @return
+     */
     public int X() {
         return this.x;
     }
 
+    /**
+     * Obtener posición en Y
+     *
+     * @return
+     */
     public int Y() {
         return this.y;
     }
 
     /**
      * Obtener la futura posición del pacman según movimiento.
-     * @return 
+     *
+     * @return
      */
     public Point getNextPos() {
         Point temp = null;
@@ -149,8 +162,8 @@ public class Pacman {
                 temp = new Point(x, y + vy);
                 break;
         }
-        
+
         return temp;
     }
-    
+
 }
