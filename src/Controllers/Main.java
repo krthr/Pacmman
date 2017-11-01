@@ -51,6 +51,9 @@ public class Main extends JFrame {
             try {
                 pc = new Main();
                 pc.setVisible(true);
+
+                Sound s = new Sound();
+                s.play();
             } catch (Exception ex) {
                 System.out.println("ERROR [CRITICO] (Main): No se pudo iniciar el juego. \n" + ex);
             }
@@ -58,7 +61,7 @@ public class Main extends JFrame {
     }
 
     /**
-     * 
+     *
      */
     class initBoard extends Canvas {
 
@@ -110,27 +113,26 @@ public class Main extends JFrame {
                 while (true) {
                     g.setColor(Color.black);
                     g.fillRect(0, 0, w, 700);
-                    
+
                     g.setColor(Color.red);
                     g.drawRect(100, 100, w - 200, 200);
-                    
-                    g.setFont(new Font("TimesRoman", Font.PLAIN, 55)); 
+
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 55));
                     g.setColor(Color.YELLOW);
                     g.drawString("P A C M A N", w / 2 - 150, 220);
-                    
-                    g.setFont(new Font("TimesRoman", Font.PLAIN, 25)); 
-                    
+
+                    g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+
                     if (i == 40) {
                         i = 0;
                         g.setColor(Color.black);
-                    }
-                    else {
+                    } else {
                         g.setColor(Color.white);
                         i++;
                     }
-                    
+
                     g.drawString("Press 's'", w / 2 - 80, 500);
-                    
+
                     getBufferStrategy().show();
                 }
             });

@@ -1,12 +1,13 @@
 package Controllers;
 
-import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -20,24 +21,11 @@ public class Sound {
     private final String MAIN_THEME;
     private String THEME;
 
+    private boolean playCompleted;
+
     public Sound() {
-
-        MAIN_THEME = "";
-
-        initThread();
-    }
-
-    /**
-     * Reproducir sonido.
-     */
-    public void play() {
-        EventQueue.invokeLater(() -> {
-            if (PLAYER == null) {
-                initThread();
-            }
-
-            PLAYER.start();
-        });
+        System.out.println(THEME);
+        MAIN_THEME = THEME = "BeepBox-Song.wav";        
     }
 
     /**
@@ -56,20 +44,44 @@ public class Sound {
     /**
      * Inicializar hilo del reproductor.
      */
-    private void initThread() {
-        this.PLAYER = new Thread(() -> {
-            File audioFile = new File(THEME);
+    public void play() {
+        
+        System.out.println(THEME);
+        File audioFile = new File(getClass().getResource("/Assets/Sounds/" + THEME).getFile());
 
-            try {
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
 
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            AudioFormat format = audioStream.getFormat();
 
-            } catch (UnsupportedAudioFileException ex) {
-                System.err.println("ERROR (Sound): El archivo de audio no es soportado.");
-            } catch (IOException ex) {
-                System.err.println("ERROR (Sound): No se ha podido reproducir el clip de audio.");
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+
+            Clip audioClip = (Clip) AudioSystem.getLine(info);
+
+            audioClip.open(audioStream);
+
+            audioClip.start();
+
+            while (!playCompleted) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
-        });
+
+            audioClip.close();
+
+        } catch (UnsupportedAudioFileException ex) {
+            System.out.println("The specified audio file is not supported.");
+            ex.printStackTrace();
+        } catch (LineUnavailableException ex) {
+            System.out.println("Audio line for playing back is unavailable.");
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            System.out.println("Error playing the audio file.");
+            ex.printStackTrace();
+        }
     }
 
 }
