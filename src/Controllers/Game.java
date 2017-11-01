@@ -1,6 +1,5 @@
 package Controllers;
 
-import static Controllers.Main.game;
 import static Controllers.Map.LEVEL1;
 import Models.Ghost;
 import Models.Pacman;
@@ -12,6 +11,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.io.Console;
+import static java.lang.System.console;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +26,7 @@ import javax.swing.JFrame;
 public class Game extends Canvas {
 
     private JFrame father;
-    
+
     private Thread GHOSTS_THREAD;
     private Thread MAIN;
 
@@ -49,20 +50,18 @@ public class Game extends Canvas {
     public Game(JFrame main, int w, int h) throws Exception {
         this.setSize(w, h);
         this.father = main;
-        
-        EventQueue.invokeLater(() -> {
 
+        EventQueue.invokeLater(() -> {
             try {
                 initKeyBoard();
                 loadData();
                 loadMainThread();
                 loadGhostsThread();
-            } catch (Exception ex) {
-                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
-            MAIN.start();
-            GHOSTS_THREAD.start();
+                MAIN.start();
+                GHOSTS_THREAD.start();
+            } catch (Exception ex) {
+            }
         });
     }
 
@@ -105,6 +104,10 @@ public class Game extends Canvas {
 
             @Override
             public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP: {
                         PACMAN.currentDirection = Pacman.UP;
@@ -120,41 +123,6 @@ public class Game extends Canvas {
                     }
                     case KeyEvent.VK_RIGHT: {
                         PACMAN.currentDirection = Pacman.RIGTH;
-                        break;
-                    }
-                    case KeyEvent.VK_R: {
-                        System.out.println("Reiniciar...");
-                        setVisible(false);
-                        
-                        Main.game = null;
-                    try {
-                        Main.game = new Game(father, getWidth(), getHeight());
-                    } catch (Exception ex) {
-                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                        father.add(game);
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP: {
-                        PACMAN.currentDirection = Pacman.NONE;
-                        break;
-                    }
-                    case KeyEvent.VK_DOWN: {
-                        PACMAN.currentDirection = Pacman.NONE;
-                        break;
-                    }
-                    case KeyEvent.VK_LEFT: {
-                        PACMAN.currentDirection = Pacman.NONE;
-                        break;
-                    }
-                    case KeyEvent.VK_RIGHT: {
-                        PACMAN.currentDirection = Pacman.NONE;
                         break;
                     }
                 }
@@ -280,10 +248,10 @@ public class Game extends Canvas {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 18; j++) {
                 if (MAP[i][j] == 1) {
-                    g.setColor(Color.blue);
+                    g.setColor(Color.black);
                     g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
                 } else {
-                    g.setColor(Color.black);
+                    g.setColor(Color.blue);
                     g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
                 }
             }
