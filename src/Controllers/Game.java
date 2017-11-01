@@ -1,5 +1,6 @@
 package Controllers;
 
+import static Controllers.Main.game;
 import static Controllers.Map.LEVEL1;
 import Models.Ghost;
 import Models.Pacman;
@@ -14,6 +15,7 @@ import java.awt.image.BufferStrategy;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
@@ -22,6 +24,8 @@ import java.util.logging.Logger;
  */
 public class Game extends Canvas {
 
+    private JFrame father;
+    
     private Thread GHOSTS_THREAD;
     private Thread MAIN;
 
@@ -37,13 +41,15 @@ public class Game extends Canvas {
 
     /**
      *
+     * @param main
      * @param w Ancho del canvas
      * @param h Alto del canvas
      * @throws Exception
      */
-    public Game(int w, int h) throws Exception {
+    public Game(JFrame main, int w, int h) throws Exception {
         this.setSize(w, h);
-
+        this.father = main;
+        
         EventQueue.invokeLater(() -> {
 
             try {
@@ -114,6 +120,19 @@ public class Game extends Canvas {
                     }
                     case KeyEvent.VK_RIGHT: {
                         PACMAN.currentDirection = Pacman.RIGTH;
+                        break;
+                    }
+                    case KeyEvent.VK_R: {
+                        System.out.println("Reiniciar...");
+                        setVisible(false);
+                        
+                        Main.game = null;
+                    try {
+                        Main.game = new Game(father, getWidth(), getHeight());
+                    } catch (Exception ex) {
+                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                        father.add(game);
                         break;
                     }
                 }
@@ -226,22 +245,18 @@ public class Game extends Canvas {
 
                         switch (rn.nextInt(3 - 2 + 1) + 2) {
                             case 1: {
-                                System.out.println("Arriba");
                                 GHOSTS[0].moveUp(currentTime);
                                 break;
                             }
                             case 2: {
-                                System.out.println("Abajo");
                                 GHOSTS[0].moveDown(currentTime);
                                 break;
                             }
                             case 3: {
-                                System.out.println("Derecha");
                                 GHOSTS[0].moveRigth(currentTime);
                                 break;
                             }
                             case 4: {
-                                System.out.println("Izquierda");
                                 GHOSTS[0].moveLeft(currentTime);
                                 break;
                             }
