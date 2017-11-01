@@ -1,20 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Models;
 
 import Controllers.Animation;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
+import static Models.Pacman.NONE;
 import static Models.Pacman.RIGTH;
 import static Models.Pacman.UP;
 import java.awt.Graphics;
+import java.awt.Point;
 import javax.swing.ImageIcon;
 
 /**
- *
+ * Fantasma.
  * @author krthr
  */
 public class Ghost {
@@ -53,17 +50,16 @@ public class Ghost {
      * @throws Exception
      */
     public void loadPics(int ghost) throws Exception {
-        System.out.println("INFO (Pacman): Cargando sprites...");
+        System.out.println("INFO (Ghost): Cargando sprites...");
         for (int j = 0; j < 4; j++) {
             animations[j] = new Animation();
             for (int i = 1; i <= 3; i++) {
-                System.out.println("INFO (Pacman): Sprite - " + ghost);
+                System.out.println("INFO (Ghost): Sprite - " + ghost);
                 animations[j].addScene(
                         new ImageIcon(getClass().getResource("/Assets/Ghost" + ghost + ".gif")).getImage(),
                         100);
             }
         }
-
     }
 
     /**
@@ -117,6 +113,41 @@ public class Ghost {
      */
     public void draw(Graphics g) {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
+    }
+    
+    /**
+     * Obtener la futura posición del fantasma.
+     * @return 
+     */
+    public Point getNextPos() {
+        Point temp = null;
+        switch (currentDirection) {
+            case NONE:
+                temp = new Point(x, y);
+                break;
+            case UP:
+                temp = new Point(x, y - vy);
+                break;
+            case RIGTH:
+                temp = new Point(x + vx, y);
+                break;
+            case LEFT:
+                temp = new Point(x - vx, y);
+                break;
+            case DOWN:
+                temp = new Point(x, y + vy);
+                break;
+        }
+        
+        return temp;
+    }
+    
+    public int X() {
+        return x;
+    }
+    
+    public int Y() {
+        return y;
     }
 
 }

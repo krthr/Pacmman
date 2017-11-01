@@ -1,28 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controllers;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 /**
- *
+ * Clase principal. 
  * @author krthr
  */
 public class Main extends JFrame {
-
+    
+    /**
+     * Juego.
+     */
     static Game game;
-
+    
+    /**
+     * Constructor.
+     * @throws Exception 
+     */
     public Main() throws Exception {
-        this.setSize(800, 600);
+        init();
+    }
+
+    /**
+     * Inicializar UI.
+     * @throws Exception 
+     */
+    public void init() throws Exception {
+        this.setSize(900, 700);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-
-        game = new Game(800, 600);
+        
+        game = new Game(900, 600);
         this.add(game);
     }
 

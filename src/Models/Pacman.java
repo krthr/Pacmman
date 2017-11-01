@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Models;
 
 import Controllers.Animation;
 import java.awt.Graphics;
+import java.awt.Point;
 import javax.swing.ImageIcon;
 
 /**
@@ -31,12 +27,12 @@ public class Pacman {
     public int currentDirection;
 
     /**
-     * 
+     *
      * @param x Posicion en x
      * @param y Posicion en y
      * @param vx Velocidad en x
      * @param vy Velocidad en y
-     * @param path 
+     * @param path
      */
     public Pacman(int x, int y, int vx, int vy, String path) {
         this.path = path;
@@ -50,8 +46,9 @@ public class Pacman {
 
     /**
      * Cargar sprites.
+     *
      * @param names
-     * @throws Exception 
+     * @throws Exception
      */
     public void loadPics(String[] names) throws Exception {
         System.out.println("INFO (Pacman): Cargando sprites...");
@@ -70,7 +67,8 @@ public class Pacman {
 
     /**
      * Mover a la derecha.
-     * @param time 
+     *
+     * @param time
      */
     public void moveRigth(long time) {
         x += vx;
@@ -80,7 +78,8 @@ public class Pacman {
 
     /**
      * Mover a la izquierda.
-     * @param time 
+     *
+     * @param time
      */
     public void moveLeft(long time) {
         x -= vx;
@@ -90,7 +89,8 @@ public class Pacman {
 
     /**
      * Mover a arriba.
-     * @param time 
+     *
+     * @param time
      */
     public void moveUp(long time) {
         y -= vy;
@@ -100,7 +100,8 @@ public class Pacman {
 
     /**
      * Mover abajo.
-     * @param time 
+     *
+     * @param time
      */
     public void moveDown(long time) {
         y += vy;
@@ -110,7 +111,8 @@ public class Pacman {
 
     /**
      * Dibujar.
-     * @param g 
+     *
+     * @param g
      */
     public void draw(Graphics g) {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
@@ -119,9 +121,36 @@ public class Pacman {
     public int X() {
         return this.x;
     }
-    
+
     public int Y() {
         return this.y;
+    }
+
+    /**
+     * Obtener la futura posición del pacman según movimiento.
+     * @return 
+     */
+    public Point getNextPos() {
+        Point temp = null;
+        switch (currentDirection) {
+            case NONE:
+                temp = new Point(x, y);
+                break;
+            case UP:
+                temp = new Point(x, y - vy);
+                break;
+            case RIGTH:
+                temp = new Point(x + vx, y);
+                break;
+            case LEFT:
+                temp = new Point(x - vx, y);
+                break;
+            case DOWN:
+                temp = new Point(x, y + vy);
+                break;
+        }
+        
+        return temp;
     }
     
 }

@@ -1,22 +1,21 @@
 package Controllers;
 
+import static Controllers.Map.LEVEL1;
 import Models.Ghost;
 import Models.Pacman;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
-/*
- * To change this template, choose Tools | Templates and open the template in
- * the editor.
- */
 /**
+ * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
  *
- * @author examen
+ * @author krthr
  */
 public class Game extends Canvas {
 
@@ -28,20 +27,15 @@ public class Game extends Canvas {
 
     private final int FPS = 10;
     private BufferStrategy bs;
-
-    private int[][] mundo = {
-        {1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1}
-    };
+    private int[][] MAP;
+    private int PRO_X;
+    private int PRO_Y;
+    private int LIFES;
 
     /**
      *
-     * @param w Ancho
-     * @param h Alto
+     * @param w Ancho del canvas
+     * @param h Alto del canvas
      * @throws Exception
      */
     public Game(int w, int h) throws Exception {
@@ -63,13 +57,16 @@ public class Game extends Canvas {
         GHOSTS = new Ghost[2];
         GHOSTS[0] = new Ghost(50, 50, 2, 2, "Ghost1");
         GHOSTS[1] = new Ghost(getWidth() - 50, getHeight() - 50, 2, 2, "Ghost2");
-        for (int i = 0; i < 2; i++) {
-            GHOSTS[i].loadPics(i);
-        }
+        for (int i = 0; i < 2; i++) GHOSTS[i].loadPics(i);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
         PACMAN = new Pacman(getWidth() / 2, getHeight() / 2, 2, 2, "Pacman");
         PACMAN.loadPics(names);
+        
+        MAP = LEVEL1;
+        PRO_X = 900 / 18;
+        PRO_Y = 600 / 10;
+        LIFES = 3;
     }
 
     /**
@@ -132,7 +129,8 @@ public class Game extends Canvas {
 
     /**
      * Iniciar hilos.
-     * @param game 
+     *
+     * @param game
      */
     public static void startGame(Game game) {
         game.MAIN.start();
@@ -143,51 +141,52 @@ public class Game extends Canvas {
      * Cargar hilo principal
      */
     private void loadMainThread() {
-        MAIN = new Thread(new Runnable() {
+        MAIN = new Thread(() -> {
+            System.out.println("INFO (Game): Cargando hilo principal...");
 
-            @Override
-            public void run() {
-                System.out.println("INFO (Game): Cargando hilo principal...");
+            createBufferStrategy(2);
+            Graphics g = getBufferStrategy().getDrawGraphics();
 
-                createBufferStrategy(2);
-                Graphics g = getBufferStrategy().getDrawGraphics();
-                long startTime = System.currentTimeMillis();
-                long currentTime = 0;
+            long startTime = System.currentTimeMillis();
+            long currentTime = 0;
 
-                while (true) {
-                    try {
-                        g.setColor(Color.BLACK);
-                        g.fillRect(0, 0, getWidth(), getHeight());
-                        currentTime = System.currentTimeMillis() - startTime;
+            while (true) {
+                try {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(0, 0, getWidth(), getHeight());
+                    drawMap(g);
+                    currentTime = System.currentTimeMillis() - startTime;
 
-                        switch (PACMAN.currentDirection) {
-                            case Pacman.RIGTH: {
-                                PACMAN.moveRigth(currentTime);
-                                break;
-                            }
-                            case Pacman.DOWN: {
-                                PACMAN.moveDown(currentTime);
-                                break;
-                            }
-                            case Pacman.LEFT: {
-                                PACMAN.moveLeft(currentTime);
-                                break;
-                            }
-                            case Pacman.UP: {
-                                PACMAN.moveUp(currentTime);
-                                break;
-                            }
+                    Point temp = PACMAN.getNextPos();
+                    verChoquePared(temp.x, temp.y);
+                    
+                    switch (PACMAN.currentDirection) {
+                        case Pacman.RIGTH: {
+                            PACMAN.moveRigth(currentTime);
+                            break;
                         }
-
-                        PACMAN.draw(g);
-                        GHOSTS[0].draw(g);
-                        GHOSTS[1].draw(g);
-
-                        Thread.sleep(FPS);
-                        getBufferStrategy().show();
-                    } catch (Exception e) {
-                        System.out.println("ERROR (Game): Error en el hilo principal. \n" + e);
+                        case Pacman.DOWN: {
+                            PACMAN.moveDown(currentTime);
+                            break;
+                        }
+                        case Pacman.LEFT: {
+                            PACMAN.moveLeft(currentTime);
+                            break;
+                        }
+                        case Pacman.UP: {
+                            PACMAN.moveUp(currentTime);
+                            break;
+                        }
                     }
+
+                    PACMAN.draw(g);
+                    GHOSTS[0].draw(g);
+                    GHOSTS[1].draw(g);
+
+                    Thread.sleep(FPS);
+                    getBufferStrategy().show();
+                } catch (Exception e) {
+                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + e);
                 }
             }
         });
@@ -208,7 +207,7 @@ public class Game extends Canvas {
                 while (true) {
                     try {
                         currentTime = System.currentTimeMillis() - startTime;
-                        
+
                         switch (rn.nextInt(3 - 2 + 1) + 2) {
                             case 1: {
                                 System.out.println("Arriba");
@@ -231,8 +230,8 @@ public class Game extends Canvas {
                                 break;
                             }
                         }
-                        
-                        Thread.sleep(100);
+
+                        Thread.sleep(40);
                     } catch (InterruptedException e) {
 
                     }
@@ -243,4 +242,39 @@ public class Game extends Canvas {
         });
     }
 
+    /**
+     * Dibujar mapa.
+     */
+    private void drawMap(Graphics g) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 18; j++) {
+                if (MAP[i][j] == 1) {
+                    g.setColor(Color.blue);
+                    g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
+                } else {
+                    g.setColor(Color.black);
+                    g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
+                }
+            }
+        }
+    }
+
+    /**
+     * Comprobar si hay un choque con la pared.
+     * @param x
+     * @param y 
+     */
+    private void verChoquePared(int x, int y) {
+ 
+    }
+    
+    /**
+     * 
+     * @param x
+     * @param y
+     * @return 
+     */
+    private void verChoqueGhost(int x, int y) {
+        
+    }
 }
