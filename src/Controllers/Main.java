@@ -22,6 +22,8 @@ public class Main extends JFrame {
      * Juego.
      */
     static Game game;
+    public static int MAX_X;
+    public static int MAX_Y;
 
     /**
      * Constructor.
@@ -43,6 +45,8 @@ public class Main extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.add(new initBoard(this, 900, 600));
+        MAX_X = 900;
+        MAX_Y = 600;
     }
 
     public static void main(String[] args) {
@@ -51,9 +55,6 @@ public class Main extends JFrame {
             try {
                 pc = new Main();
                 pc.setVisible(true);
-
-                Sound s = new Sound();
-                s.play();
             } catch (Exception ex) {
                 System.out.println("ERROR [CRITICO] (Main): No se pudo iniciar el juego. \n" + ex);
             }

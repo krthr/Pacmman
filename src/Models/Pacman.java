@@ -1,9 +1,13 @@
 package Models;
 
 import Controllers.Animation;
+import static Controllers.Game.GHOSTS;
+import static Controllers.Main.MAX_X;
+import static Controllers.Main.MAX_Y;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.ImageIcon;
+import static Controllers.Game.PIXELS;
 
 /**
  * Modelo de Pacman.
@@ -164,6 +168,34 @@ public class Pacman {
         }
 
         return temp;
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isOut(int x, int y) {
+        return x < 0 || y < 0 || (x + PIXELS) > MAX_X || (y + PIXELS) > MAX_Y;
+    }
+
+    public boolean isKilled() {
+
+        for (Ghost temp : GHOSTS) {
+            int a = temp.X(), b = temp.Y();
+            if (x == a && y == b) {
+                return true;
+            } else if (x > a && x + PIXELS < a + PIXELS && x < a + PIXELS && y > b && y < b + PIXELS) {
+                return true;
+            } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b + PIXELS) {
+                return true;
+            } else if (x > a && x < a + PIXELS && x + PIXELS > a + PIXELS && y < b && y + PIXELS > b && y + PIXELS < b + PIXELS) {
+                return true;
+            } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b) return true;
+        }
+
+        return false;
     }
 
 }

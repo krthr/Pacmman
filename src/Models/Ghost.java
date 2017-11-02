@@ -1,6 +1,8 @@
 package Models;
 
 import Controllers.Animation;
+import static Controllers.Main.MAX_X;
+import static Controllers.Main.MAX_Y;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.NONE;
@@ -158,6 +160,16 @@ public class Ghost {
      */
     public int Y() {
         return y;
+    }
+    
+    /**
+     * 
+     * @param x
+     * @param y
+     * @return 
+     */
+    public boolean isOut(int x, int y) {
+        return x < 0 || y < 0 || (x + 32) > MAX_X || (y + 32) > MAX_Y;
     }
 
 }
