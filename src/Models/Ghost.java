@@ -29,7 +29,7 @@ public class Ghost {
     public int currentDirection;
 
     /**
-     *
+     * Constructor de Fantasmas.
      * @param x Posicion en x
      * @param y Posicion en y
      * @param vx Velocidad en x

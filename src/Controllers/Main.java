@@ -24,6 +24,7 @@ public class Main extends JFrame {
     static Game game;
     public static int MAX_X;
     public static int MAX_Y;
+    public static String TITLE = "P A C M A N";
 
     /**
      * Constructor.
@@ -45,10 +46,11 @@ public class Main extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.add(new initBoard(this, 900, 600));
+        this.setTitle(TITLE);
         MAX_X = 900;
         MAX_Y = 600;
     }
-
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             Main pc;
@@ -65,10 +67,10 @@ public class Main extends JFrame {
      *
      */
     class initBoard extends Canvas {
-
+        
         Thread thread;
         int w, h;
-
+        
         public initBoard(JFrame main, int w, int h) {
             EventQueue.invokeLater(() -> {
                 this.w = w;
@@ -77,10 +79,10 @@ public class Main extends JFrame {
                     @Override
                     public void keyTyped(KeyEvent e) {
                     }
-
+                    
                     @Override
                     public void keyPressed(KeyEvent e) {
-
+                        
                         switch (e.getKeyCode()) {
                             case KeyEvent.VK_S: {
                                 System.out.println("Iniciar");
@@ -95,17 +97,17 @@ public class Main extends JFrame {
                             }
                         }
                     }
-
+                    
                     @Override
                     public void keyReleased(KeyEvent e) {
                     }
-
+                    
                 });
                 run();
                 thread.start();
             });
         }
-
+        
         public void run() {
             thread = new Thread(() -> {
                 createBufferStrategy(2);
@@ -114,16 +116,16 @@ public class Main extends JFrame {
                 while (true) {
                     g.setColor(Color.black);
                     g.fillRect(0, 0, w, 700);
-
+                    
                     g.setColor(Color.red);
                     g.drawRect(100, 100, w - 200, 200);
-
+                    
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 55));
                     g.setColor(Color.YELLOW);
                     g.drawString("P A C M A N", w / 2 - 150, 220);
-
+                    
                     g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-
+                    
                     if (i == 40) {
                         i = 0;
                         g.setColor(Color.black);
@@ -131,14 +133,14 @@ public class Main extends JFrame {
                         g.setColor(Color.white);
                         i++;
                     }
-
+                    
                     g.drawString("Press 's'", w / 2 - 80, 500);
-
+                    
                     getBufferStrategy().show();
                 }
             });
-
+            
         }
-
+        
     }
 }

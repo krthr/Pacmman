@@ -53,7 +53,7 @@ public class Game extends Canvas {
         EventQueue.invokeLater(() -> {
             try {
                 initKeyBoard();
-                loadData();
+                loadData(w, h);
                 loadMainThread();
                 loadGhostsThread();
 
@@ -69,14 +69,15 @@ public class Game extends Canvas {
      *
      * @throws Exception
      */
-    private void loadData() throws Exception {
+    private void loadData(int w, int h) throws Exception {
         System.out.println("INFO (Game): Cargando datos...");
 
         GHOSTS = new Ghost[2];
         
-        // for (int i = 0; i < z; i++)
-        GHOSTS[0] = new Ghost(50, 50, 2, 2, "Ghost1");
-        GHOSTS[1] = new Ghost(getWidth() - 50, getHeight() - 50, 2, 2, "Ghost2");
+        for (int i = 0; i < 2; i++) {
+            GHOSTS[i] = new Ghost(w / 2 + i * 10, h / 2 + i*10, (i + 1)*10, (i + 1)*10, "Ghost" + i);
+        }
+        
         for (int i = 0; i < 2; i++) {
             GHOSTS[i].loadPics(i);
         }
@@ -85,10 +86,15 @@ public class Game extends Canvas {
         PACMAN = new Pacman(getWidth() / 2, getHeight() / 2, 2, 2, "Pacman");
         PACMAN.loadPics(names);
 
+        /** Mapa actual */
         MAP = LEVEL1;
+        /** Proporción pixeles-matrix en X */
         PRO_X = 900 / 25;
+        /** Proporción pixeles-matrix en Y */
         PRO_Y = 600 / 15;
+        /** Número de vidas */
         LIFES = 3;
+        /** Tamaño en pixeles de los sprites */
         PIXELS = 22;
     }
 
@@ -171,15 +177,15 @@ public class Game extends Canvas {
 
                     switch (PACMAN.currentDirection) {
                         case Pacman.RIGTH: {
-                            PACMAN.moveRigth(currentTime);
+                            PACMAN.moveRigth(4*currentTime);
                             break;
                         }
                         case Pacman.DOWN: {
-                            PACMAN.moveDown(currentTime);
+                            PACMAN.moveDown(10*currentTime);
                             break;
                         }
                         case Pacman.LEFT: {
-                            PACMAN.moveLeft(currentTime);
+                            PACMAN.moveLeft(50*currentTime);
                             break;
                         }
                         case Pacman.UP: {
