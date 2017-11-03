@@ -3,30 +3,30 @@ package Controllers;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
 
 public class Board extends javax.swing.JFrame {
 
+    /**
+     * Ancho de la ventana del juego.
+     */
     public static int GAME_WIDTH;
+    /**
+     * Alto de la ventana del juego.
+     */
     public static int GAME_HEIGHT;
 
-    public static boolean PAUSE;
     public static boolean INIT;
     public int op = 1;
 
+    /**
+     * 
+     */
     public Board() {
         initComponents();
-
         // setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.arrowOp2.setVisible(false);
-
         INIT = false;
-        PAUSE = false;
-
         addKeyEvent(this);
-
         EventQueue.invokeLater(() -> {
             GAME_WIDTH = 1000;
             GAME_HEIGHT = 600;
@@ -49,6 +49,7 @@ public class Board extends javax.swing.JFrame {
 
                 int k = e.getKeyCode();
 
+                // Si es hacia arriba
                 if (k == KeyEvent.VK_UP || k == KeyEvent.VK_LEFT) {
                     if (op == 2) {
                         op = 1;
@@ -103,7 +104,6 @@ public class Board extends javax.swing.JFrame {
         setLocationByPlatform(true);
         setMaximumSize(new java.awt.Dimension(1000, 630));
         setMinimumSize(new java.awt.Dimension(1000, 630));
-        setPreferredSize(new java.awt.Dimension(1000, 630));
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 

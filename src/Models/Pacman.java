@@ -1,9 +1,9 @@
 package Models;
 
 import Controllers.Animation;
+import static Controllers.Board.GAME_HEIGHT;
+import static Controllers.Board.GAME_WIDTH;
 import static Controllers.Game.GHOSTS;
-import static Controllers.Main.MAX_X;
-import static Controllers.Main.MAX_Y;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.ImageIcon;
@@ -16,17 +16,14 @@ import static Controllers.Game.PIXELS;
  */
 public class Pacman {
 
-    public static final int UP = 0;
-    public static final int RIGTH = 1;
-    public static final int DOWN = 2;
-    public static final int LEFT = 3;
-    public static final int NONE = -1;
+    public static final int UP = 0,
+            RIGTH = 1,
+            DOWN = 2,
+            LEFT = 3,
+            NONE = -1;
 
     Animation[] animations;
-    int x;
-    int y;
-    int vx;
-    int vy;
+    int x, y, vx, vy;
     String path;
     public int currentAnimation;
     public int currentDirection;
@@ -171,17 +168,22 @@ public class Pacman {
     }
 
     /**
+     * Verificar si Pacman está fuera del tablero.
      *
      * @param x
      * @param y
      * @return
      */
     public boolean isOut(int x, int y) {
-        return x < 0 || y < 0 || (x + PIXELS) > MAX_X || (y + PIXELS) > MAX_Y;
+        return x < 0 || y < 0 || (x + 32) > GAME_WIDTH || (y + 32) > GAME_HEIGHT;
     }
 
+    /**
+     * Verificar si Pacman es tocado por algún fantasma.
+     *
+     * @return
+     */
     public boolean isKilled() {
-
         for (Ghost temp : GHOSTS) {
             int a = temp.X(), b = temp.Y();
             if (x == a && y == b) {
@@ -192,7 +194,9 @@ public class Pacman {
                 return true;
             } else if (x > a && x < a + PIXELS && x + PIXELS > a + PIXELS && y < b && y + PIXELS > b && y + PIXELS < b + PIXELS) {
                 return true;
-            } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b) return true;
+            } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b) {
+                return true;
+            }
         }
 
         return false;

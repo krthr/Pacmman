@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Animation {
 
-    private ArrayList<OneScene> scenes;
+    private final ArrayList<OneScene> scenes;
     private int sceneIndex;
     private long movieTime;
     private long totalTime;
@@ -18,6 +18,9 @@ public class Animation {
         sceneIndex = 0;
     }
 
+    /**
+     * 
+     */
     public Animation() {
         scenes = new ArrayList<OneScene>();
         totalTime = 0;

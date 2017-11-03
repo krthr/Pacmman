@@ -11,13 +11,10 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -27,11 +24,20 @@ import javax.swing.JFrame;
  */
 public class Game extends Canvas {
 
-    private JFrame father;
+    /**
+     * Frame padre del juego.
+     */
+    private final JFrame father;
 
+    /**
+     * Hilos del juego.
+     */
     private Thread GHOSTS_THREAD;
     private Thread MAIN;
 
+    /**
+     * Caracteres del juego.
+     */
     public Pacman PACMAN;
     public static Ghost[] GHOSTS;
 
@@ -59,7 +65,6 @@ public class Game extends Canvas {
 
         EventQueue.invokeLater(() -> {
             try {
-
                 loadData(w, h);
                 loadCharacters(w, h);
                 loadMainThread();
@@ -104,11 +109,18 @@ public class Game extends Canvas {
         PAUSE = false;
     }
 
+    /**
+     * Crear caracteres del juego.
+     *
+     * @param w Ancho
+     * @param h Alto
+     * @throws Exception
+     */
     private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[2];
 
         GHOSTS[0] = new Ghost(10, 10, 5, 5, "Ghost0");
-        GHOSTS[1] = new Ghost(w, h, 5, 5, "Ghost1");
+        GHOSTS[1] = new Ghost(GAME_WIDTH, GAME_HEIGHT, 5, 5, "Ghost1");
 
         for (int i = 0; i < 2; i++) {
             GHOSTS[i].loadPics(i);

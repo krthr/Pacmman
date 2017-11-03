@@ -1,8 +1,9 @@
 package Models;
 
 import Controllers.Animation;
-import static Controllers.Main.MAX_X;
-import static Controllers.Main.MAX_Y;
+import Controllers.Board;
+import static Controllers.Board.GAME_HEIGHT;
+import static Controllers.Board.GAME_WIDTH;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.NONE;
@@ -163,13 +164,13 @@ public class Ghost {
     }
     
     /**
-     * 
+     * Comprobar si el fantasma está fuera del mapa.
      * @param x
      * @param y
      * @return 
      */
     public boolean isOut(int x, int y) {
-        return x < 0 || y < 0 || (x + 32) > MAX_X || (y + 32) > MAX_Y;
+        return x < 0 || y < 0 || (x + 32) > GAME_WIDTH || (y + 32) > GAME_HEIGHT;
     }
 
 }
