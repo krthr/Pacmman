@@ -7,14 +7,22 @@ import static Controllers.Map.N_X;
 import static Controllers.Map.N_Y;
 import Models.Ghost;
 import Models.Pacman;
+import static Models.Pacman.DOWN;
+import static Models.Pacman.LEFT;
+import static Models.Pacman.NONE;
+import static Models.Pacman.RIGTH;
+import static Models.Pacman.UP;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -43,9 +51,9 @@ public class Game extends Canvas {
 
     private final int FPS = 10;
     private BufferStrategy bs;
-    private int[][] MAP;
-    private int PRO_X;
-    private int PRO_Y;
+    public static int[][] MAP;
+    public static int PRO_X;
+    public static int PRO_Y;
     private int LIFES;
     public static int PIXELS;
     private boolean PAUSE;
@@ -60,6 +68,7 @@ public class Game extends Canvas {
     public Game(JFrame main, int w, int h) throws Exception {
         this.setSize(w, h);
         this.father = main;
+        this.requestFocus();
 
         initKeyBoard();
 
@@ -127,8 +136,9 @@ public class Game extends Canvas {
         }
 
         String[] names = {"arriba", "der", "abajo", "izq"};
-        PACMAN = new Pacman(getWidth() / 2, getHeight() / 2, 2, 2, "Pacman");
+        PACMAN = new Pacman(468, 366, 2, 2, "Pacman");
         PACMAN.loadPics(names);
+        PACMAN.currentDirection = RIGTH;
     }
 
     /**
@@ -145,32 +155,23 @@ public class Game extends Canvas {
 
             @Override
             public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP: {
-                        PACMAN.currentDirection = Pacman.UP;
+                        PACMAN.currentDirection = UP;
                         break;
                     }
                     case KeyEvent.VK_DOWN: {
-                        PACMAN.currentDirection = Pacman.DOWN;
+                        PACMAN.currentDirection = DOWN;
                         break;
                     }
                     case KeyEvent.VK_LEFT: {
-                        PACMAN.currentDirection = Pacman.LEFT;
+                        PACMAN.currentDirection = LEFT;
                         break;
                     }
                     case KeyEvent.VK_RIGHT: {
-                        PACMAN.currentDirection = Pacman.RIGTH;
+                        PACMAN.currentDirection = RIGTH;
                         break;
                     }
-                    case KeyEvent.VK_R: {
-                        // TODO
-                        break;
-                    }
-
                     case KeyEvent.VK_P: {
                         if (PAUSE) {
                             PAUSE = false;
@@ -182,7 +183,31 @@ public class Game extends Canvas {
                     }
                 }
             }
-        });
+
+            @Override
+
+            public void keyReleased(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_UP: {
+                        PACMAN.currentDirection = NONE;
+                        break;
+                    }
+                    case KeyEvent.VK_DOWN: {
+                        PACMAN.currentDirection = NONE;
+                        break;
+                    }
+                    case KeyEvent.VK_LEFT: {
+                        PACMAN.currentDirection = NONE;
+                        break;
+                    }
+                    case KeyEvent.VK_RIGHT: {
+                        PACMAN.currentDirection = NONE;
+                        break;
+                    }
+                }
+            }
+        }
+        );
     }
 
     /**
@@ -208,13 +233,16 @@ public class Game extends Canvas {
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
 
+            
+            showHorWall();
             while (true) {
 
-                if (PAUSE) {
-                    System.out.println("Pausa");
-                    continue;
-                } else {
-                    System.out.println("No pausa");
+                while (PAUSE) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {
+                        System.err.println("ERROR (Game): Hubo un error al tratar de pausar el juego.");
+                    }
                 }
 
                 try {
@@ -223,25 +251,35 @@ public class Game extends Canvas {
                     drawMap(g);
                     currentTime = System.currentTimeMillis() - startTime;
 
+                    Point next = PACMAN.getNextPos();
+                    if (PACMAN.isOut(next)) {
+                        System.out.println("INFO (Game): Pacman fuera.");
+                        PACMAN.currentDirection = NONE;
+                    } else if (PACMAN.touchsWall(next)) {
+                        System.out.println("INFO (Game): Pacman pared");
+                        PACMAN.currentDirection = NONE;
+                    }
+
                     switch (PACMAN.currentDirection) {
-                        case Pacman.RIGTH: {
+                        case RIGTH: {
                             PACMAN.moveRigth(currentTime);
                             break;
                         }
-                        case Pacman.DOWN: {
+                        case DOWN: {
                             PACMAN.moveDown(currentTime);
                             break;
                         }
-                        case Pacman.LEFT: {
+                        case LEFT: {
                             PACMAN.moveLeft(currentTime);
                             break;
                         }
-                        case Pacman.UP: {
+                        case UP: {
                             PACMAN.moveUp(currentTime);
                             break;
                         }
                     }
 
+                    // System.out.println("POS: (" + PACMAN.X() + "," +  PACMAN.Y() + ")");
                     PACMAN.draw(g);
                     GHOSTS[0].draw(g);
                     GHOSTS[1].draw(g);
@@ -251,6 +289,7 @@ public class Game extends Canvas {
                 } catch (Exception e) {
                     System.out.println("ERROR (Game): Error en el hilo principal. \n" + e);
                 }
+
             }
         });
     }
@@ -269,11 +308,12 @@ public class Game extends Canvas {
 
                 while (true) {
 
-                    if (PAUSE) {
-                        System.out.println("Pausa");
-                        continue;
-                    } else {
-                        System.out.println("No pausa");
+                    while (PAUSE) {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
 
                     try {
@@ -300,8 +340,6 @@ public class Game extends Canvas {
                         }
 
                         if (GHOSTS[0].isOut(GHOSTS[0].X(), GHOSTS[0].Y())) {
-                            System.out.println("Fantasma 1 fuera");
-
                             switch (temp) {
                                 case 1:
                                     GHOSTS[0].moveDown(currentTime);
@@ -316,8 +354,6 @@ public class Game extends Canvas {
                                     GHOSTS[0].moveRigth(currentTime);
                                     break;
                             }
-                        } else {
-                            System.out.println("Fantasma 1 Dentro");
                         }
 
                         Thread.sleep(40);
@@ -348,23 +384,15 @@ public class Game extends Canvas {
         }
     }
 
-    /**
-     * Comprobar si hay un choque con la pared.
-     *
-     * @param x
-     * @param y
-     */
-    private void verChoquePared(int x, int y) {
-        // TODO
+    void showHorWall() {
+        for (int i = 0; i < N_X; i++) {
+            System.out.print(i*PRO_X + " ");
+        }
+        
+        System.out.println("");
+        for (int i = 0; i < N_Y; i++) {
+            System.out.print(i*PRO_Y + " ");
+        }
     }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    private void verChoqueGhost(int x, int y) {
-        // TODO
-    }
+    
 }

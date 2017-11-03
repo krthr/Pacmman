@@ -3,11 +3,16 @@ package Models;
 import Controllers.Animation;
 import static Controllers.Board.GAME_HEIGHT;
 import static Controllers.Board.GAME_WIDTH;
+import Controllers.Game;
 import static Controllers.Game.GHOSTS;
+import static Controllers.Game.MAP;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.ImageIcon;
 import static Controllers.Game.PIXELS;
+import static Controllers.Game.PRO_X;
+import static Controllers.Game.PRO_Y;
+import Controllers.Map;
 
 /**
  * Modelo de Pacman.
@@ -170,12 +175,11 @@ public class Pacman {
     /**
      * Verificar si Pacman está fuera del tablero.
      *
-     * @param x
-     * @param y
+     * @param p
      * @return
      */
-    public boolean isOut(int x, int y) {
-        return x < 0 || y < 0 || (x + 32) > GAME_WIDTH || (y + 32) > GAME_HEIGHT;
+    public boolean isOut(Point p) {
+        return p.x < 0 || p.y < 0 || (p.x + 32) > GAME_WIDTH || (p.y + 32) > GAME_HEIGHT;
     }
 
     /**
@@ -196,6 +200,27 @@ public class Pacman {
                 return true;
             } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param p
+     * @return
+     */
+    public boolean touchsWall(Point p) {
+        int x = p.x, y = p.y;
+        for (int i = 0; i < Map.N_Y; i++) {
+            for (int j = 0; j < Map.N_X; j++) {
+                if (MAP[i][j] == 1) {
+                    int h = j * PRO_X, v = i * PRO_Y;
+                    if (x > h && x < (j + 1) * PRO_X && y > v && y < (i + 1) * PRO_Y) {
+                        return true;
+                    }
+                }
             }
         }
 
