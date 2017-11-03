@@ -126,14 +126,10 @@ public class Game extends Canvas {
      * @throws Exception
      */
     private void loadCharacters(int w, int h) throws Exception {
-        GHOSTS = new Ghost[2];
+        GHOSTS = new Ghost[1];
 
-        GHOSTS[0] = new Ghost(10, 10, 5, 5, "Ghost0");
-        GHOSTS[1] = new Ghost(GAME_WIDTH, GAME_HEIGHT, 5, 5, "Ghost1");
-
-        for (int i = 0; i < 2; i++) {
-            GHOSTS[i].loadPics(i);
-        }
+        GHOSTS[0] = new Ghost(468, 280, 5, 5, "Ghost0");
+        GHOSTS[0].loadPics(0);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
         PACMAN = new Pacman(468, 366, 2, 2, "Pacman");
@@ -233,7 +229,6 @@ public class Game extends Canvas {
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
 
-            
             showHorWall();
             while (true) {
 
@@ -256,7 +251,7 @@ public class Game extends Canvas {
                         System.out.println("INFO (Game): Pacman fuera.");
                         PACMAN.currentDirection = NONE;
                     } else if (PACMAN.touchsWall(next)) {
-                        System.out.println("INFO (Game): Pacman pared");
+                        // System.out.println("INFO (Game): Pacman pared");
                         PACMAN.currentDirection = NONE;
                     }
 
@@ -279,10 +274,9 @@ public class Game extends Canvas {
                         }
                     }
 
-                    // System.out.println("POS: (" + PACMAN.X() + "," +  PACMAN.Y() + ")");
+                    System.out.println("POS: (" + PACMAN.X() + "," + PACMAN.Y() + ")");
                     PACMAN.draw(g);
-                    GHOSTS[0].draw(g);
-                    GHOSTS[1].draw(g);
+                    drawGhosts(g);
 
                     Thread.sleep(FPS);
                     getBufferStrategy().show();
@@ -292,6 +286,17 @@ public class Game extends Canvas {
 
             }
         });
+    }
+
+    /**
+     * Dibujar todos los fantasma en el tablero.
+     *
+     * @param g
+     */
+    private void drawGhosts(Graphics g) {
+        for (Ghost temp : GHOSTS) {
+            temp.draw(g);
+        }
     }
 
     /**
@@ -386,13 +391,13 @@ public class Game extends Canvas {
 
     void showHorWall() {
         for (int i = 0; i < N_X; i++) {
-            System.out.print(i*PRO_X + " ");
+            System.out.print(i * PRO_X + " ");
         }
-        
+
         System.out.println("");
         for (int i = 0; i < N_Y; i++) {
-            System.out.print(i*PRO_Y + " ");
+            System.out.print(i * PRO_Y + " ");
         }
     }
-    
+
 }

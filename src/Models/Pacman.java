@@ -21,6 +21,9 @@ import Controllers.Map;
  */
 public class Pacman {
 
+    /**
+     * Código de las direcciones.
+     */
     public static final int UP = 0,
             RIGTH = 1,
             DOWN = 2,
