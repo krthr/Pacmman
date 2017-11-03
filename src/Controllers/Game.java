@@ -1,5 +1,7 @@
 package Controllers;
 
+import static Controllers.Board.GAME_HEIGHT;
+import static Controllers.Board.GAME_WIDTH;
 import static Controllers.Map.LEVEL1;
 import static Controllers.Map.N_X;
 import static Controllers.Map.N_Y;
@@ -14,6 +16,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -38,6 +42,7 @@ public class Game extends Canvas {
     private int PRO_Y;
     private int LIFES;
     public static int PIXELS;
+    private boolean PAUSE;
 
     /**
      *
@@ -50,10 +55,13 @@ public class Game extends Canvas {
         this.setSize(w, h);
         this.father = main;
 
+        initKeyBoard();
+
         EventQueue.invokeLater(() -> {
             try {
-                initKeyBoard();
+
                 loadData(w, h);
+                loadCharacters(w, h);
                 loadMainThread();
                 loadGhostsThread();
 
@@ -72,12 +80,36 @@ public class Game extends Canvas {
     private void loadData(int w, int h) throws Exception {
         System.out.println("INFO (Game): Cargando datos...");
 
+        /**
+         * Mapa actual
+         */
+        MAP = LEVEL1;
+        /**
+         * Proporción pixeles-matrix en X
+         */
+        PRO_X = w / 25;
+        /**
+         * Proporción pixeles-matrix en Y
+         */
+        PRO_Y = h / 15;
+        /**
+         * Número de vidas
+         */
+        LIFES = 3;
+        /**
+         * Tamaño en pixeles de los sprites
+         */
+        PIXELS = 22;
+
+        PAUSE = false;
+    }
+
+    private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[2];
-        
-        for (int i = 0; i < 2; i++) {
-            GHOSTS[i] = new Ghost(w / 2 + i * 10, h / 2 + i*10, (i + 1)*10, (i + 1)*10, "Ghost" + i);
-        }
-        
+
+        GHOSTS[0] = new Ghost(10, 10, 5, 5, "Ghost0");
+        GHOSTS[1] = new Ghost(w, h, 5, 5, "Ghost1");
+
         for (int i = 0; i < 2; i++) {
             GHOSTS[i].loadPics(i);
         }
@@ -85,17 +117,6 @@ public class Game extends Canvas {
         String[] names = {"arriba", "der", "abajo", "izq"};
         PACMAN = new Pacman(getWidth() / 2, getHeight() / 2, 2, 2, "Pacman");
         PACMAN.loadPics(names);
-
-        /** Mapa actual */
-        MAP = LEVEL1;
-        /** Proporción pixeles-matrix en X */
-        PRO_X = 900 / 25;
-        /** Proporción pixeles-matrix en Y */
-        PRO_Y = 600 / 15;
-        /** Número de vidas */
-        LIFES = 3;
-        /** Tamaño en pixeles de los sprites */
-        PIXELS = 22;
     }
 
     /**
@@ -133,6 +154,20 @@ public class Game extends Canvas {
                         PACMAN.currentDirection = Pacman.RIGTH;
                         break;
                     }
+                    case KeyEvent.VK_R: {
+                        // TODO
+                        break;
+                    }
+
+                    case KeyEvent.VK_P: {
+                        if (PAUSE) {
+                            PAUSE = false;
+                        } else {
+                            PAUSE = true;
+                        }
+
+                        break;
+                    }
                 }
             }
         });
@@ -149,7 +184,7 @@ public class Game extends Canvas {
     }
 
     /**
-     * Cargar hilo principal
+     * Cargar hilo principal.
      */
     private void loadMainThread() {
         MAIN = new Thread(() -> {
@@ -162,30 +197,31 @@ public class Game extends Canvas {
             long currentTime = 0;
 
             while (true) {
+
+                if (PAUSE) {
+                    System.out.println("Pausa");
+                    continue;
+                } else {
+                    System.out.println("No pausa");
+                }
+
                 try {
                     g.setColor(Color.BLACK);
                     g.fillRect(0, 0, getWidth(), getHeight());
                     drawMap(g);
                     currentTime = System.currentTimeMillis() - startTime;
 
-                    Point temp = PACMAN.getNextPos();
-                    if (PACMAN.isOut(temp.x, temp.y)) {
-                        PACMAN.currentDirection = Pacman.NONE;
-                    }
-                    
-                    if (PACMAN.isKilled()) System.out.println("MUERTOOOO");
-
                     switch (PACMAN.currentDirection) {
                         case Pacman.RIGTH: {
-                            PACMAN.moveRigth(4*currentTime);
+                            PACMAN.moveRigth(currentTime);
                             break;
                         }
                         case Pacman.DOWN: {
-                            PACMAN.moveDown(10*currentTime);
+                            PACMAN.moveDown(currentTime);
                             break;
                         }
                         case Pacman.LEFT: {
-                            PACMAN.moveLeft(50*currentTime);
+                            PACMAN.moveLeft(currentTime);
                             break;
                         }
                         case Pacman.UP: {
@@ -220,9 +256,17 @@ public class Game extends Canvas {
                 Random rn = new Random();
 
                 while (true) {
+
+                    if (PAUSE) {
+                        System.out.println("Pausa");
+                        continue;
+                    } else {
+                        System.out.println("No pausa");
+                    }
+
                     try {
                         currentTime = System.currentTimeMillis() - startTime;
-                        
+
                         int temp = rn.nextInt(4 - 1 + 1) + 1;
                         switch (temp) {
                             case 1: {
@@ -242,10 +286,10 @@ public class Game extends Canvas {
                                 break;
                             }
                         }
-                        
+
                         if (GHOSTS[0].isOut(GHOSTS[0].X(), GHOSTS[0].Y())) {
                             System.out.println("Fantasma 1 fuera");
-                            
+
                             switch (temp) {
                                 case 1:
                                     GHOSTS[0].moveDown(currentTime);
@@ -260,8 +304,9 @@ public class Game extends Canvas {
                                     GHOSTS[0].moveRigth(currentTime);
                                     break;
                             }
+                        } else {
+                            System.out.println("Fantasma 1 Dentro");
                         }
-                        else System.out.println("Fantasma 1 Dentro");
 
                         Thread.sleep(40);
                     } catch (InterruptedException e) {
