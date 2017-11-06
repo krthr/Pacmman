@@ -4,7 +4,15 @@ import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import static Controllers.GraphController.loadGraph;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Controlador principal del juego. A éste JFrame se agrega el canvas del juego.
+ *
+ * @author krthr
+ */
 public class BoardController extends javax.swing.JFrame {
 
     /**
@@ -31,7 +39,7 @@ public class BoardController extends javax.swing.JFrame {
         EventQueue.invokeLater(() -> {
             GAME_WIDTH = 1000;
             GAME_HEIGHT = 600;
-            loadGraph();
+            // loadGraph();
         });
     }
 
@@ -73,7 +81,7 @@ public class BoardController extends javax.swing.JFrame {
                             add(new GameController(main, GAME_WIDTH, GAME_HEIGHT, true));
                             INIT = true;
                         } catch (Exception ex) {
-                            System.err.println("ERROR (Board): Error al crear y agregar  nuevo juego.");
+                            System.err.println("ERROR (Board): Error al crear y agregar  nuevo juego. \n" + ex);
                         }
                     }
                 }
@@ -260,7 +268,7 @@ public class BoardController extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

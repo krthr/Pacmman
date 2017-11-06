@@ -1,6 +1,7 @@
 package Models;
 
 import static Controllers.GraphController.TAM_NODOS;
+import static Controllers.GraphController.searchNode;
 
 /**
  * Modelo de las aristas del grafo.
@@ -75,8 +76,16 @@ public class Edge {
      *
      * @return
      */
-    public double dist() {
+    public int getWeight() {
         return this.dist;
+    }
+
+    public Node getSource() {
+        return searchNode(init);
+    }
+
+    public Node getDestination() {
+        return searchNode(end);
     }
 
     @Override

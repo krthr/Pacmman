@@ -49,6 +49,24 @@ public class GraphController {
     private static int N_ID = 0;
 
     /**
+     * Obtener la lista de nodos.
+     *
+     * @return
+     */
+    public static ArrayList<Node> getNodes() {
+        return NODES;
+    }
+
+    /**
+     * Obtener la lista de aristas.
+     *
+     * @return
+     */
+    public static ArrayList<Edge> getEdges() {
+        return EDGES;
+    }
+
+    /**
      * Cargar datos del grafo desde un archivo de texto.
      *
      * @throws java.io.IOException
@@ -68,7 +86,13 @@ public class GraphController {
         BufferedReader edges = new BufferedReader(new FileReader(EDGES_FILE));
 
         String temp;
-        while ((temp = edges.readLine()) != null) {
+        while (true) {
+            temp = edges.readLine();
+
+            if (temp == null || temp.equals("")) {
+                break;
+            }
+
             String[] nodes = temp.split(",");
             int init = toInt(nodes[0]), end = toInt(nodes[1]);
 
@@ -88,7 +112,14 @@ public class GraphController {
         BufferedReader nodes = new BufferedReader(new FileReader(NODES_FILE));
 
         String temp;
-        while ((temp = nodes.readLine()) != null) {
+
+        while (true) {
+            temp = nodes.readLine();
+
+            if (temp == null || temp.equals("")) {
+                break;
+            }
+
             String[] point = temp.split(",");
             int x = toInt(point[0]), y = toInt(point[1]);
 
@@ -98,7 +129,13 @@ public class GraphController {
     }
 
     private static int toInt(String str) {
-        return Integer.parseInt(str);
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException ex) {
+
+            System.err.println("ERROR (Graph): Error al convertir un string a entero. \n" + ex);
+            return -1;
+        }
     }
 
     /**
@@ -211,7 +248,7 @@ public class GraphController {
         }
 
         EDGES.forEach((Edge edge) -> {
-            MATRIZ[edge.init()][edge.end()] = MATRIZ[edge.end()][edge.init()] = (int) edge.dist();
+            MATRIZ[edge.init()][edge.end()] = MATRIZ[edge.end()][edge.init()] = (int) edge.getWeight();
         });
     }
 

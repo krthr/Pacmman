@@ -3,33 +3,35 @@ package Controllers;
 import java.awt.Image;
 import java.util.ArrayList;
 
+/**
+ * Controlador encargado de la animación de cada caracter.
+ *
+ * @author krthr
+ */
 public class AnimationController {
 
     private final ArrayList<OneScene> scenes;
     private int sceneIndex;
     private long movieTime;
     private long totalTime;
-    
-    /**
-     * 
-     */
+
     public synchronized void start() {
         movieTime = 0;
         sceneIndex = 0;
     }
 
     /**
-     * 
+     *
      */
     public AnimationController() {
-        scenes = new ArrayList<OneScene>();
+        scenes = new ArrayList<>();
         totalTime = 0;
         start();
     }
-    
+
     /**
-     * 
-     * @param timePassed 
+     *
+     * @param timePassed
      */
     public synchronized void update(long timePassed) {
         if (scenes.size() > 1) {
@@ -45,11 +47,11 @@ public class AnimationController {
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param i
-     * @param t 
+     * @param t
      */
     public synchronized void addScene(Image i, long t) {
         totalTime += t;
