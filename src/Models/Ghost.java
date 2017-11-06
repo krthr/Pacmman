@@ -30,6 +30,7 @@ public class Ghost {
 
     /**
      * Constructor de Fantasmas.
+     *
      * @param x Posicion en x
      * @param y Posicion en y
      * @param vx Velocidad en x
@@ -148,7 +149,8 @@ public class Ghost {
 
     /**
      * Obtener posición en x
-     * @return 
+     *
+     * @return
      */
     public int X() {
         return x;
@@ -156,20 +158,34 @@ public class Ghost {
 
     /**
      * Obtener posición en y
-     * @return 
+     *
+     * @return
      */
     public int Y() {
         return y;
     }
-    
+
     /**
      * Comprobar si el fantasma está fuera del mapa.
+     *
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     public boolean isOut(int x, int y) {
         return x < 0 || y < 0 || (x + 32) > GAME_WIDTH || (y + 32) > GAME_HEIGHT;
+    }
+
+    /**
+     * Verificar si el fantasma toca una pared.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean touchsWall(int x, int y) {
+        // TODO
+        return false;
     }
 
 }

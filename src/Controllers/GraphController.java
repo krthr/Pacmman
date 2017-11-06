@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Constrolador del grafo.
@@ -33,7 +35,7 @@ public class GraphController {
     /**
      * Archivos del grafo.
      */
-    private static final File GRAPH_FILE = new File(GraphController.class.getClass().getResource("/Models/graph.txt").getFile());
+    private static final File EDGES_FILE = new File(GraphController.class.getClass().getResource("/Models/edges.txt").getFile());
     private static final File NODES_FILE = new File(GraphController.class.getClass().getResource("/Models/nodes.txt").getFile());
     /**
      * Tamaño de los nodos.
@@ -48,21 +50,55 @@ public class GraphController {
 
     /**
      * Cargar datos del grafo desde un archivo de texto.
+     *
+     * @throws java.io.IOException
      */
-    public static void loadGraph() {
-        if (GRAPH_FILE == null) {
-            return;
+    public static void loadGraph() throws IOException {
+        loadNodes();
+        loadEdges();
+        generateMatriz();
+    }
+
+    /**
+     * Cargar aristas del grafo.
+     *
+     * @throws FileNotFoundException
+     */
+    public static void loadEdges() throws FileNotFoundException, IOException {
+        BufferedReader edges = new BufferedReader(new FileReader(EDGES_FILE));
+
+        String temp;
+        while ((temp = edges.readLine()) != null) {
+            String[] nodes = temp.split(",");
+            int init = toInt(nodes[0]), end = toInt(nodes[1]);
+
+            Node a = searchNode(init), b = searchNode(end);
+
+            addEdge(a, b);
+        }
+    }
+
+    /**
+     * Cargar nodos del grafo.
+     *
+     * @throws IOException
+     */
+    public static void loadNodes() throws IOException {
+
+        BufferedReader nodes = new BufferedReader(new FileReader(NODES_FILE));
+
+        String temp;
+        while ((temp = nodes.readLine()) != null) {
+            String[] point = temp.split(",");
+            int x = toInt(point[0]), y = toInt(point[1]);
+
+            addNode(x, y);
         }
 
-        try {
-            BufferedReader graph = new BufferedReader(new FileReader(GRAPH_FILE));
-            BufferedReader nodes = new BufferedReader(new FileReader(NODES_FILE));
+    }
 
-        } catch (FileNotFoundException ex) {
-            System.err.println("ERROR (Graph): Archivo no encontrado. \n" + ex);
-        } catch (IOException ex) {
-            System.err.println("ERROR (Graph): Ocurrió un error al leer el archivo. \n" + ex);
-        }
+    private static int toInt(String str) {
+        return Integer.parseInt(str);
     }
 
     /**
@@ -137,8 +173,8 @@ public class GraphController {
     /**
      * Añadir nodo a la lista de nodos.
      *
-     * @param x
-     * @param y
+     * @param x Posición en x
+     * @param y Posición en Y
      */
     public static void addNode(int x, int y) {
         if (NODES == null) {
@@ -167,7 +203,7 @@ public class GraphController {
     /**
      * Generar matriz de adyacencia
      */
-    public void generateMatriz() {
+    public static void generateMatriz() {
         if (MATRIZ == null) {
             MATRIZ = new int[NODES.size()][NODES.size()];
         } else {
@@ -186,7 +222,7 @@ public class GraphController {
      * @param g
      * @param color
      */
-    public void selNode(Node node, Graphics g, Color color) {
+    public static void selNode(Node node, Graphics g, Color color) {
         g.setColor(color);
         g.drawOval(node.X(), node.Y(), TAM_NODOS - 1, TAM_NODOS - 1);
     }

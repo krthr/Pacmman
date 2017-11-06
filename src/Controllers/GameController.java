@@ -10,7 +10,6 @@ import static Models.Pacman.LEFT;
 import static Models.Pacman.NONE;
 import static Models.Pacman.RIGTH;
 import static Models.Pacman.UP;
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -23,19 +22,20 @@ import java.awt.image.BufferStrategy;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
+
+;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
  *
  * @author krthr
  */
-public class GameController extends Canvas {
+public class GameController extends java.awt.Canvas {
 
     /**
      * Frame padre del juego.
      */
-    private final JFrame father;
+    private final javax.swing.JFrame father;
 
     /**
      * Hilos del juego.
@@ -46,17 +46,40 @@ public class GameController extends Canvas {
     /**
      * Caracteres del juego.
      */
-    public Pacman PACMAN;
+    public Models.Pacman PACMAN;
     public static Ghost[] GHOSTS;
 
     private final int FPS = 10;
     private BufferStrategy bs;
+    /**
+     * Mapa actual
+     */
     public static int[][] MAP;
+    /**
+     * Proporción pixeles-matrix en X.
+     */
     public static int PRO_X;
+    /**
+     * Proporción pixeles-matrix en Y.
+     */
     public static int PRO_Y;
-    private int LIFES;
+    /**
+     * Número de vidas en el juego.
+     */
+    public static final int LIFES = 3;
+    /**
+     * Tamaño en pixeles de los sprites.
+     */
     public static int PIXELS;
     private boolean PAUSE;
+    /**
+     * Color de las paredes.
+     */
+    private static Color WALL_COLOR;
+    /**
+     * Color del camino.
+     */
+    private static Color WAY_COLOR;
 
     private boolean DEV_MODE;
 
@@ -68,7 +91,7 @@ public class GameController extends Canvas {
      * @param dev ¿Iniciar en modo desarrollo?
      * @throws Exception
      */
-    public GameController(JFrame main, int w, int h, boolean dev) throws Exception {
+    public GameController(javax.swing.JFrame main, int w, int h, boolean dev) throws Exception {
         this.setSize(w, h);
         this.father = main;
         this.requestFocus();
@@ -133,30 +156,16 @@ public class GameController extends Canvas {
     private void loadData(int w, int h) throws Exception {
         System.out.println("INFO (Game): Cargando datos...");
 
-        /**
-         * Mapa actual
-         */
         MAP = LEVEL1;
-        /**
-         * Proporción pixeles-matrix en X
-         */
         PRO_X = w / 25;
-        /**
-         * Proporción pixeles-matrix en Y
-         */
         PRO_Y = h / 15;
-        /**
-         * Número de vidas
-         */
-        LIFES = 3;
-        /**
-         * Tamaño en pixeles de los sprites
-         */
         PIXELS = 22;
         /**
          * Juego en pausa.
          */
         PAUSE = false;
+        WALL_COLOR = Color.BLUE;
+        WAY_COLOR = Color.BLACK;
     }
 
     /**
@@ -252,7 +261,7 @@ public class GameController extends Canvas {
      *
      * @param game
      */
-    public static void startGame(GameController game) {
+    public static void startGame(Controllers.GameController game) {
         game.MAIN.start();
         game.GHOSTS_THREAD.start();
     }
@@ -428,6 +437,13 @@ public class GameController extends Canvas {
                 }
             }
         }
+    }
+
+    /**
+     * Mostrar una ventana con un mensaje de error.
+     */
+    private void showMessage(String msg) {
+        javax.swing.JOptionPane.showMessageDialog(father, msg, "P A C M M A N", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
 
     void showHorWall() {

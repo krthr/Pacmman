@@ -4,6 +4,7 @@ import Controllers.AnimationController;
 import static Controllers.BoardController.GAME_HEIGHT;
 import static Controllers.BoardController.GAME_WIDTH;
 import static Controllers.GameController.GHOSTS;
+import static Controllers.GameController.LIFES;
 import static Controllers.GameController.MAP;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -29,11 +30,16 @@ public class Pacman {
             LEFT = 3,
             NONE = -1;
 
+    /**
+     * Cantidad de vidas.
+     */
+    private int lifes;
+
     AnimationController[] animations;
+    AnimationController[] death_animations;
     int x, y, vx, vy;
     String path;
-    public int currentAnimation;
-    public int currentDirection;
+    public int currentAnimation, currentDirection;
 
     /**
      * Pacman.
@@ -51,6 +57,7 @@ public class Pacman {
         this.vx = vx;
         this.vy = vy;
         this.currentDirection = -1;
+        this.lifes = LIFES;
         animations = new AnimationController[4];
     }
 
@@ -227,6 +234,22 @@ public class Pacman {
         }
 
         return false;
+    }
+
+    /**
+     * ¿Está Pacman muerto?
+     *
+     * @return
+     */
+    public boolean isDead() {
+        return this.lifes <= 0;
+    }
+
+    /**
+     * Disminuir en 1 las vidas del Pacman.
+     */
+    public void minusLife() {
+        this.lifes--;
     }
 
 }

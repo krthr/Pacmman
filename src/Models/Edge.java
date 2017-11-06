@@ -79,4 +79,9 @@ public class Edge {
         return this.dist;
     }
 
+    @Override
+    public String toString() {
+        return this.init + "," + this.end;
+    }
+
 }
