@@ -3,7 +3,7 @@ package Controllers;
 import java.awt.Image;
 import java.util.ArrayList;
 
-public class Animation {
+public class AnimationController {
 
     private final ArrayList<OneScene> scenes;
     private int sceneIndex;
@@ -21,7 +21,7 @@ public class Animation {
     /**
      * 
      */
-    public Animation() {
+    public AnimationController() {
         scenes = new ArrayList<OneScene>();
         totalTime = 0;
         start();

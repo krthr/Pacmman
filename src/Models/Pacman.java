@@ -1,18 +1,18 @@
 package Models;
 
-import Controllers.Animation;
-import static Controllers.Board.GAME_HEIGHT;
-import static Controllers.Board.GAME_WIDTH;
-import Controllers.Game;
-import static Controllers.Game.GHOSTS;
-import static Controllers.Game.MAP;
+import Controllers.AnimationController;
+import static Controllers.BoardController.GAME_HEIGHT;
+import static Controllers.BoardController.GAME_WIDTH;
+import Controllers.GameController;
+import static Controllers.GameController.GHOSTS;
+import static Controllers.GameController.MAP;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.ImageIcon;
-import static Controllers.Game.PIXELS;
-import static Controllers.Game.PRO_X;
-import static Controllers.Game.PRO_Y;
-import Controllers.Map;
+import static Controllers.GameController.PIXELS;
+import static Controllers.GameController.PRO_X;
+import static Controllers.GameController.PRO_Y;
+import Controllers.MapController;
 
 /**
  * Modelo de Pacman.
@@ -30,7 +30,7 @@ public class Pacman {
             LEFT = 3,
             NONE = -1;
 
-    Animation[] animations;
+    AnimationController[] animations;
     int x, y, vx, vy;
     String path;
     public int currentAnimation;
@@ -52,7 +52,7 @@ public class Pacman {
         this.vx = vx;
         this.vy = vy;
         this.currentDirection = -1;
-        animations = new Animation[4];
+        animations = new AnimationController[4];
     }
 
     /**
@@ -65,7 +65,7 @@ public class Pacman {
         System.out.println("INFO (Pacman): Cargando sprites...");
         for (int j = 0; j < 4; j++) {
             String name = names[j];
-            animations[j] = new Animation();
+            animations[j] = new AnimationController();
             for (int i = 1; i <= 3; i++) {
                 System.out.println("INFO (Pacman): Sprite - " + name + "" + i);
                 animations[j].addScene(
@@ -216,8 +216,8 @@ public class Pacman {
      */
     public boolean touchsWall(Point p) {
         int x = p.x, y = p.y;
-        for (int i = 0; i < Map.N_Y; i++) {
-            for (int j = 0; j < Map.N_X; j++) {
+        for (int i = 0; i < MapController.N_Y; i++) {
+            for (int j = 0; j < MapController.N_X; j++) {
                 if (MAP[i][j] == 1) {
                     int h = j * PRO_X, v = i * PRO_Y;
                     if (x > h && x < (j + 1) * PRO_X && y > v && y < (i + 1) * PRO_Y) {

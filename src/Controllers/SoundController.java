@@ -15,7 +15,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  *
  * @author krthr
  */
-public class Sound {
+public class SoundController {
 
     private Thread PLAYER;
     private final String MAIN_THEME;
@@ -23,7 +23,7 @@ public class Sound {
 
     private boolean playCompleted;
 
-    public Sound() {
+    public SoundController() {
         System.out.println(THEME);
         MAIN_THEME = THEME = "BeepBox-Song.wav";        
     }

@@ -1,10 +1,10 @@
 package Controllers;
 
-import static Controllers.Board.GAME_HEIGHT;
-import static Controllers.Board.GAME_WIDTH;
-import static Controllers.Map.LEVEL1;
-import static Controllers.Map.N_X;
-import static Controllers.Map.N_Y;
+import static Controllers.BoardController.GAME_HEIGHT;
+import static Controllers.BoardController.GAME_WIDTH;
+import static Controllers.MapController.LEVEL1;
+import static Controllers.MapController.N_X;
+import static Controllers.MapController.N_Y;
 import Models.Ghost;
 import Models.Pacman;
 import static Models.Pacman.DOWN;
@@ -19,6 +19,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 import java.util.logging.Level;
@@ -30,7 +32,7 @@ import javax.swing.JFrame;
  *
  * @author krthr
  */
-public class Game extends Canvas {
+public class GameController extends Canvas {
 
     /**
      * Frame padre del juego.
@@ -58,14 +60,17 @@ public class Game extends Canvas {
     public static int PIXELS;
     private boolean PAUSE;
 
+    private boolean DEV_MODE;
+
     /**
      *
      * @param main
      * @param w Ancho del canvas
      * @param h Alto del canvas
+     * @param dev ¿Iniciar en modo desarrollo?
      * @throws Exception
      */
-    public Game(JFrame main, int w, int h) throws Exception {
+    public GameController(JFrame main, int w, int h, boolean dev) throws Exception {
         this.setSize(w, h);
         this.father = main;
         this.requestFocus();
@@ -79,9 +84,42 @@ public class Game extends Canvas {
                 loadMainThread();
                 loadGhostsThread();
 
+                if (dev) {
+                    DEV_MODE = true;
+                    devMode();
+                }
+
                 MAIN.start();
                 GHOSTS_THREAD.start();
             } catch (Exception ex) {
+            }
+        });
+    }
+
+    private void devMode() {
+        int tamNodos = 10;
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Graphics g = getBufferStrategy().getDrawGraphics();
+
+                // TODO
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
             }
         });
     }
@@ -114,7 +152,9 @@ public class Game extends Canvas {
          * Tamaño en pixeles de los sprites
          */
         PIXELS = 22;
-
+        /**
+         * Juego en pausa.
+         */
         PAUSE = false;
     }
 
@@ -211,7 +251,7 @@ public class Game extends Canvas {
      *
      * @param game
      */
-    public static void startGame(Game game) {
+    public static void startGame(GameController game) {
         game.MAIN.start();
         game.GHOSTS_THREAD.start();
     }
@@ -251,7 +291,7 @@ public class Game extends Canvas {
                         System.out.println("INFO (Game): Pacman fuera.");
                         PACMAN.currentDirection = NONE;
                     } else if (PACMAN.touchsWall(next)) {
-                        // System.out.println("INFO (Game): Pacman pared");
+                        // System.out.println("INFO (GameController): Pacman pared");
                         PACMAN.currentDirection = NONE;
                     }
 
@@ -317,7 +357,7 @@ public class Game extends Canvas {
                         try {
                             Thread.sleep(10);
                         } catch (InterruptedException ex) {
-                            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
 

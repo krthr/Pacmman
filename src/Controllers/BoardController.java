@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Board extends javax.swing.JFrame {
+public class BoardController extends javax.swing.JFrame {
 
     /**
      * Ancho de la ventana del juego.
@@ -19,9 +19,9 @@ public class Board extends javax.swing.JFrame {
     public int op = 1;
 
     /**
-     * 
+     *
      */
-    public Board() {
+    public BoardController() {
         initComponents();
         // setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.arrowOp2.setVisible(false);
@@ -68,7 +68,7 @@ public class Board extends javax.swing.JFrame {
                     } else {
                         mainPanel.setVisible(false);
                         try {
-                            add(new Game(main, GAME_WIDTH, GAME_HEIGHT));
+                            add(new GameController(main, GAME_WIDTH, GAME_HEIGHT, true));
                             INIT = true;
                         } catch (Exception ex) {
                             System.err.println("ERROR (Board): Error al crear y agregar  nuevo juego.");
@@ -102,7 +102,6 @@ public class Board extends javax.swing.JFrame {
         setTitle("P A C M A N");
         setAlwaysOnTop(true);
         setLocationByPlatform(true);
-        setMaximumSize(new java.awt.Dimension(1000, 630));
         setMinimumSize(new java.awt.Dimension(1000, 630));
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
@@ -269,20 +268,21 @@ public class Board extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BoardController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BoardController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BoardController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BoardController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Board().setVisible(true);
+                new BoardController().setVisible(true);
             }
         });
     }
