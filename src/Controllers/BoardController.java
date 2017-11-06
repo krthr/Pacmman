@@ -3,6 +3,7 @@ package Controllers;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import static Controllers.GraphController.loadGraph;
 
 public class BoardController extends javax.swing.JFrame {
 
@@ -19,7 +20,7 @@ public class BoardController extends javax.swing.JFrame {
     public int op = 1;
 
     /**
-     *
+     * Crear nueva ventana de juego.
      */
     public BoardController() {
         initComponents();
@@ -30,6 +31,7 @@ public class BoardController extends javax.swing.JFrame {
         EventQueue.invokeLater(() -> {
             GAME_WIDTH = 1000;
             GAME_HEIGHT = 600;
+            loadGraph();
         });
     }
 

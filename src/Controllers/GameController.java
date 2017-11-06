@@ -1,7 +1,5 @@
 package Controllers;
 
-import static Controllers.BoardController.GAME_HEIGHT;
-import static Controllers.BoardController.GAME_WIDTH;
 import static Controllers.MapController.LEVEL1;
 import static Controllers.MapController.N_X;
 import static Controllers.MapController.N_Y;
@@ -96,6 +94,9 @@ public class GameController extends Canvas {
         });
     }
 
+    /**
+     * Modo desarrollador. En modo desarrollador
+     */
     private void devMode() {
         int tamNodos = 10;
         this.addMouseListener(new MouseListener() {

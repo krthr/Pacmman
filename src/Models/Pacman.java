@@ -3,7 +3,6 @@ package Models;
 import Controllers.AnimationController;
 import static Controllers.BoardController.GAME_HEIGHT;
 import static Controllers.BoardController.GAME_WIDTH;
-import Controllers.GameController;
 import static Controllers.GameController.GHOSTS;
 import static Controllers.GameController.MAP;
 import java.awt.Graphics;
