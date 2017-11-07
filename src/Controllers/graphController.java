@@ -1,12 +1,20 @@
 package Controllers;
 
+import static Controllers.gameController.PRO_X;
+import static Controllers.gameController.PRO_Y;
+import static Controllers.mapController.LEVEL1;
+import static Controllers.mapController.N_X;
+import static Controllers.mapController.N_Y;
 import Models.Edge;
 import Models.Node;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -81,60 +89,34 @@ public class graphController {
      * @throws java.io.IOException
      */
     public static void loadGraph() throws IOException {
-        loadNodes();
+
+        for (int i = 0; i < N_Y; i++) {
+            for (int j = 0; j < N_X; j++) {
+                if (LEVEL1[i][j] == 0) {
+                    addNode(j * PRO_X, i * PRO_Y);
+                }
+            }
+        }
+
         loadEdges();
         generateMatriz();
+
+//        System.out.println(NODES.size());
+//        System.out.println("PROX: " + PRO_X);
+//        System.out.println("PROY: " + PRO_Y);
+//        System.out.println("FILE: " + NODES_FILE.getAbsolutePath());
+//
+//        try (BufferedWriter wr = new BufferedWriter(new FileWriter(NODES_FILE))) {
+//            for (Node temp : NODES) {
+//                System.out.println("id: " + temp.id() + " " + temp.X() + "," + temp.Y());
+//                wr.write(temp.X() + "," + temp.Y() + "\n");
+//            }
+//        } catch (IOException ex) {
+//        }
     }
 
-    /**
-     * Cargar aristas del grafo.
-     *
-     * @throws FileNotFoundException
-     */
-    public static void loadEdges() throws FileNotFoundException, IOException {
-        BufferedReader edges = new BufferedReader(new FileReader(EDGES_FILE));
-
-        String temp;
-        while (true) {
-            temp = edges.readLine();
-
-            if (temp == null || temp.equals("")) {
-                break;
-            }
-
-            String[] nodes = temp.split(",");
-            int init = toInt(nodes[0]), end = toInt(nodes[1]);
-
-            Node a = searchNode(init), b = searchNode(end);
-
-            addEdge(a, b);
-        }
-    }
-
-    /**
-     * Cargar nodos del grafo.
-     *
-     * @throws IOException
-     */
-    public static void loadNodes() throws IOException {
-
-        BufferedReader nodes = new BufferedReader(new FileReader(NODES_FILE));
-
-        String temp;
-
-        while (true) {
-            temp = nodes.readLine();
-
-            if (temp == null || temp.equals("")) {
-                break;
-            }
-
-            String[] point = temp.split(",");
-            int x = toInt(point[0]), y = toInt(point[1]);
-
-            addNode(x, y);
-        }
-
+    public static void loadEdges() {
+        // TODO
     }
 
     private static int toInt(String str) {
@@ -148,115 +130,14 @@ public class graphController {
     }
 
     /**
-     * Buscar nodo usando ID.
-     *
-     * @param id ID del nodo.
-     * @return
-     */
-    public static Node searchNode(int id) {
-        if (NODES == null) {
-            return null;
-        }
-
-        for (Node temp : NODES) {
-            if (temp.id() == id) {
-                return temp;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Buscar nodo por coordenadas.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public static Node searchNode(int x, int y) {
-        for (Node temp : NODES) {
-            if (x == temp.X() && y == temp.Y()) {
-                return temp;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Buscar nodo por cercano a cierta coordenada.
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    public static Node searchNearNode(int x, int y) {
-        if (NODES == null) {
-            return null;
-        }
-
-        for (Node temp : NODES) {
-            if (x >= temp.X() && x <= temp.X() + TAM_NODOS
-                    && y >= temp.Y() && y <= temp.Y() + TAM_NODOS) {
-                return temp;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Verificar si existe un nodo con el ID.
-     *
-     * @param id
-     * @return
-     */
-    public static boolean isNode(int id) {
-        if (NODES == null) {
-            return false;
-        }
-
-        return NODES.stream().anyMatch((temp) -> (temp.id() == id));
-    }
-
-    /**
-     * Añadir nodo a la lista de nodos.
-     *
-     * @param x Posición en x
-     * @param y Posición en Y
-     */
-    public static void addNode(int x, int y) {
-        if (NODES == null) {
-            NODES = new ArrayList<>();
-        }
-
-        NODES.add(new Node(N_ID, x, y));
-        N_ID++;
-    }
-
-    /**
-     * Añadir arista a la lista de aristas.
-     *
-     * @param init
-     * @param end
-     */
-    public static void addEdge(Node init, Node end) {
-        if (EDGES == null) {
-            EDGES = new ArrayList<>();
-        }
-
-        int dist = distance(init.X() + TAM_NODOS / 2, end.X() + TAM_NODOS / 2, init.Y() + TAM_NODOS / 2, end.Y() + TAM_NODOS / 2);
-        EDGES.add(new Edge(init, end, dist));
-    }
-
-    /**
-     * Generar matriz de adyacencia
+     * Generar matriz de adyacencia.
      */
     public static void generateMatriz() {
         if (MATRIZ == null) {
             MATRIZ = new int[NODES.size()][NODES.size()];
-        } else {
+        }
+
+        if (EDGES == null) {
             return;
         }
 
@@ -277,6 +158,59 @@ public class graphController {
     private static int distance(int x1, int x2, int y1, int y2) {
         double dist = Math.sqrt(Math.pow(x2 - x1, 2.0) + Math.pow(y2 - y1, 2.0));
         return (int) dist;
+    }
+
+    /**
+     * Añadir nuevo nodo al grafo.
+     *
+     * @param x
+     * @param y
+     */
+    private static void addNode(int x, int y) {
+        Node temp = new Node(N_ID, x, y);
+
+        if (NODES == null) {
+            NODES = new ArrayList<>();
+        }
+
+        NODES.add(temp);
+        N_ID++;
+    }
+
+    private static void addEdge(int x1, int x2, int y1, int y2) {
+        if (EDGES == null) {
+            EDGES = new ArrayList<>();
+        }
+
+        Node init = searchNode(x1, y1), end = searchNode(x2, y2);
+
+        if (init == null || end == null) {
+            return;
+        }
+
+        Edge temp = new Edge(init.id(), end.id(), x1, x2, y1, y2);
+        EDGES.add(temp);
+    }
+
+    /**
+     * Buscar nodo.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    private static Node searchNode(int x, int y) {
+        if (NODES == null) {
+            return null;
+        }
+
+        for (Node temp : NODES) {
+            if (temp.X() == x && temp.Y() == y) {
+                return temp;
+            }
+        }
+
+        return null;
     }
 
 }

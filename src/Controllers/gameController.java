@@ -1,18 +1,10 @@
 package Controllers;
 
-import static Controllers.drawController.selNode;
+import static Controllers.drawController.drawEdges;
 import static Controllers.drawController.drawMap;
 import static Controllers.drawController.drawNodes;
-import static Controllers.drawController.drawEdges;
-import static Controllers.drawController.drawEdge;
-import static Controllers.drawController.drawNode;
+import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
-import static Controllers.graphController.TAM_NODOS;
-import static Controllers.graphController.searchNearNode;
-import static Controllers.graphController.addEdge;
-import static Controllers.graphController.addNode;
-import static Controllers.graphController.lastEdge;
-import Models.Edge;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.NONE;
@@ -21,15 +13,12 @@ import static Models.Pacman.UP;
 import Models.Ghost;
 import Models.Node;
 import Models.Pacman;
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.Arrays;
 import java.util.Random;
@@ -83,14 +72,6 @@ public class gameController extends java.awt.Canvas {
      */
     public static int PIXELS;
     private boolean PAUSE;
-    /**
-     * Color de las paredes.
-     */
-    private static Color WALL_COLOR;
-    /**
-     * Color del camino.
-     */
-    private static Color WAY_COLOR;
 
     /**
      *
@@ -109,7 +90,10 @@ public class gameController extends java.awt.Canvas {
 
         EventQueue.invokeLater(() -> {
             try {
+
                 loadData(w, h);
+                loadGraph();
+
                 loadCharacters(w, h);
                 loadMainThread();
                 loadGhostsThread();
@@ -117,77 +101,13 @@ public class gameController extends java.awt.Canvas {
                 MAIN.start();
                 GHOSTS_THREAD.start();
             } catch (Exception ex) {
+                System.err.println("ERROR (Game): Error al cargar funciones principales. \n" + Arrays.toString(ex.getStackTrace()));
             }
         });
     }
 
     int temp = 0;
     Node init = null, end = null;
-
-    /**
-     * Modo desarrollador. En modo desarrollador se pueden seleccionar y crear
-     * los nodos y las aristas.
-     */
-    private void devMode(Canvas c) {
-        this.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                createBufferStrategy(2);
-                Graphics g = getBufferStrategy().getDrawGraphics();
-
-                if (temp <= 1) {
-                    g.setColor(Color.BLUE);
-                    drawNode(g, e.getX() - (TAM_NODOS / 2), e.getY() - (TAM_NODOS / 2));
-                    addNode(e.getX() - (TAM_NODOS / 2), e.getY() - (TAM_NODOS / 2));
-                    temp++;
-                } else {
-                    temp = 0;
-                    if (init == null) {
-                        init = searchNearNode(e.getX(), e.getY());
-                        if (init != null) {
-                            selNode(init, g, Color.WHITE);
-                        }
-                    } else {
-                        end = searchNearNode(e.getX(), e.getY());
-                        if (end != null) {
-                            selNode(end, g, Color.red);
-                            if (end.id() != init.id()) {
-                                g.setColor(Color.black);
-
-                                drawEdge(g, init.X() + TAM_NODOS / 2, end.X() + TAM_NODOS / 2, init.Y() + TAM_NODOS / 2, end.Y() + TAM_NODOS / 2);
-                                addEdge(init, end);
-                                System.out.println("distancia: " + lastEdge().getWeight());
-                            } else {
-                                selNode(init, g, Color.black);
-                            }
-                            selNode(init, g, Color.black);
-                            selNode(end, g, Color.black);
-                            init = null;
-                        } else {
-                            selNode(init, g, Color.black);
-                            init = null;
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-    }
 
     /**
      * Cargar datos.
@@ -205,8 +125,7 @@ public class gameController extends java.awt.Canvas {
          * Juego en pausa.
          */
         PAUSE = false;
-        WALL_COLOR = Color.BLUE;
-        WAY_COLOR = Color.BLACK;
+
     }
 
     /**
@@ -336,8 +255,8 @@ public class gameController extends java.awt.Canvas {
                     g.fillRect(0, 0, getWidth(), getHeight());
 
                     drawMap(g);
-                    drawEdges(g);
                     drawNodes(g);
+                    drawEdges(g);
 
                     currentTime = System.currentTimeMillis() - startTime;
 
@@ -376,7 +295,7 @@ public class gameController extends java.awt.Canvas {
                     Thread.sleep(FPS);
                     getBufferStrategy().show();
                 } catch (Exception e) {
-                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + Arrays.toString(e.getStackTrace()));
+                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + e.getMessage());
                 }
 
             }

@@ -1,7 +1,7 @@
 package Models;
 
 import static Controllers.graphController.TAM_NODOS;
-import static Controllers.graphController.searchNode;
+import static java.lang.Math.pow;
 
 /**
  * Modelo de las aristas del grafo.
@@ -26,14 +26,14 @@ public class Edge {
      * @param y2 Y del nodo final
      * @param dist
      */
-    public Edge(int init, int end, int x1, int y1, int x2, int y2, int dist) {
+    public Edge(int init, int end, int x1, int y1, int x2, int y2) {
         this.init = init;
         this.end = end;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
-        this.dist = dist;
+        this.dist = (int) Math.sqrt(pow(x2 - x1, 2.0) + pow(y2 - y1, 2.0));
     }
 
     /**
@@ -46,10 +46,10 @@ public class Edge {
     public Edge(Node init, Node end, int dist) {
         this.init = init.id();
         this.end = end.id();
-        this.x1 = init.X() + (TAM_NODOS / 2);
-        this.y1 = init.Y() + (TAM_NODOS / 2);
-        this.x2 = end.X() + (TAM_NODOS / 2);
-        this.y2 = end.Y() + (TAM_NODOS / 2);
+        this.x1 = init.X();
+        this.y1 = init.Y();
+        this.x2 = end.X();
+        this.y2 = end.Y();
         this.dist = dist;
     }
 
@@ -117,11 +117,13 @@ public class Edge {
     }
 
     public Node getSource() {
-        return searchNode(init);
+        // return searchNode(init);
+        return null;
     }
 
     public Node getDestination() {
-        return searchNode(end);
+        // return searchNode(end);
+        return null;
     }
 
     @Override

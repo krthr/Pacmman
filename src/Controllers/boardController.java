@@ -33,14 +33,12 @@ public class boardController extends javax.swing.JFrame {
     public boardController() {
         initComponents();
         setSize(1000, 600);
-        // setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.arrowOp2.setVisible(false);
         INIT = false;
         addKeyEvent(this);
         EventQueue.invokeLater(() -> {
             GAME_WIDTH = 1000;
             GAME_HEIGHT = 600;
-            // loadGraph();
         });
     }
 

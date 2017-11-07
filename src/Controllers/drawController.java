@@ -20,6 +20,15 @@ import java.awt.Color;
 public class drawController {
 
     /**
+     * Color de las paredes.
+     */
+    public final static Color WALL_COLOR = Color.BLUE;
+    /**
+     * Color del camino.
+     */
+    public final static Color WAY_COLOR = Color.BLACK;
+
+    /**
      * Seleccionar un nodo en modo visual.
      *
      * @param node Nodo.
@@ -32,7 +41,7 @@ public class drawController {
     }
 
     /**
-     * Dibujar todos los nodos.
+     * Dibujar nodos del grafo.
      *
      * @param g
      */
@@ -41,9 +50,10 @@ public class drawController {
             return;
         }
 
-        getNodes().forEach((temp) -> {
-            drawNode(g, temp.X(), temp.Y());
-        });
+        for (Node temp : getNodes()) {
+            // drawNode(g, temp.X(), temp.Y());
+            drawOvalNode(g, temp.X(), temp.Y());
+        }
     }
 
     /**
@@ -55,7 +65,12 @@ public class drawController {
      */
     public static void drawNode(Graphics g, int x, int y) {
         g.setColor(NODES_COLOR);
-        g.fillOval(x, y, TAM_NODOS, TAM_NODOS);
+        g.drawRect(x, y, PRO_X, PRO_Y);
+    }
+
+    public static void drawOvalNode(Graphics g, int x, int y) {
+        g.setColor(NODES_COLOR);
+        g.fillOval(x + PRO_X / 4, y + PRO_Y / 4, PRO_X / 2, PRO_Y / 2);
     }
 
     /**
@@ -68,7 +83,9 @@ public class drawController {
             return;
         }
 
+        // System.out.println("TAM: " + getEdges().size());
         getEdges().forEach((temp) -> {
+            System.out.println(temp.toString());
             drawEdge(g, temp.getX2(), temp.getX2(), temp.getY1(), temp.getY2());
         });
     }
@@ -83,7 +100,8 @@ public class drawController {
      * @param y2
      */
     public static void drawEdge(Graphics g, int x1, int x2, int y1, int y2) {
-        g.drawLine(x1, y1, x2, y2);
+        g.setColor(NODES_COLOR);
+        g.drawLine(x1 - PRO_X / 2, y1 - PRO_Y / 2, x2 - PRO_X / 2, y2 - PRO_Y / 2);
     }
 
     /**
@@ -95,10 +113,10 @@ public class drawController {
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
                 if (MAP[i][j] == 1) {
-                    g.setColor(Color.black);
+                    g.setColor(WALL_COLOR);
                     g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
                 } else {
-                    g.setColor(Color.blue);
+                    g.setColor(WAY_COLOR);
                     g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
                 }
             }

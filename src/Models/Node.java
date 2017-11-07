@@ -25,8 +25,8 @@ public class Node {
      */
     public Node(int id, int x, int y) {
         this.id = id;
-        this.posx = x - (TAM_NODOS / 2);
-        this.posy = y - (TAM_NODOS / 2);
+        this.posx = x;
+        this.posy = y;
         this.color = NODES_COLOR;
     }
 

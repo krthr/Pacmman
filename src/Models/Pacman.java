@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
+import static Controllers.graphController.getNodes;
 import Controllers.mapController;
 
 /**
@@ -221,18 +222,6 @@ public class Pacman {
      * @return
      */
     public boolean touchsWall(Point p) {
-        int x = p.x, y = p.y;
-        for (int i = 0; i < mapController.N_Y; i++) {
-            for (int j = 0; j < mapController.N_X; j++) {
-                if (MAP[i][j] == 1) {
-                    int h = j * PRO_X, v = i * PRO_Y;
-                    if (x > h && x < (j + 1) * PRO_X && y > v && y < (i + 1) * PRO_Y) {
-                        return true;
-                    }
-                }
-            }
-        }
-
         return false;
     }
 
