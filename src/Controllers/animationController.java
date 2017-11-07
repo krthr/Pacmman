@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  * @author krthr
  */
-public class AnimationController {
+public class animationController {
 
     private final ArrayList<OneScene> scenes;
     private int sceneIndex;
@@ -23,7 +23,7 @@ public class AnimationController {
     /**
      *
      */
-    public AnimationController() {
+    public animationController() {
         scenes = new ArrayList<>();
         totalTime = 0;
         start();

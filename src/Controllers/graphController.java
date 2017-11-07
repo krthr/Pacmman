@@ -3,22 +3,19 @@ package Controllers;
 import Models.Edge;
 import Models.Node;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Constrolador del grafo.
  *
  * @author krthr
  */
-public class GraphController {
+public class graphController {
 
     /**
      * Matriz de adyacencia.
@@ -35,8 +32,8 @@ public class GraphController {
     /**
      * Archivos del grafo.
      */
-    private static final File EDGES_FILE = new File(GraphController.class.getClass().getResource("/Models/edges.txt").getFile());
-    private static final File NODES_FILE = new File(GraphController.class.getClass().getResource("/Models/nodes.txt").getFile());
+    private static final File EDGES_FILE = new File(graphController.class.getClass().getResource("/Models/edges.txt").getFile());
+    private static final File NODES_FILE = new File(graphController.class.getClass().getResource("/Models/nodes.txt").getFile());
     /**
      * Tamaño de los nodos.
      */
@@ -47,6 +44,10 @@ public class GraphController {
     public static final Color NODES_COLOR = Color.RED;
 
     private static int N_ID = 0;
+
+    public static int N() {
+        return N_ID;
+    }
 
     /**
      * Obtener la lista de nodos.
@@ -64,6 +65,14 @@ public class GraphController {
      */
     public static ArrayList<Edge> getEdges() {
         return EDGES;
+    }
+
+    public static Edge lastEdge() {
+        if (EDGES == null) {
+            return null;
+        }
+
+        return EDGES.get(EDGES.size() - 1);
     }
 
     /**
@@ -183,6 +192,10 @@ public class GraphController {
      * @return
      */
     public static Node searchNearNode(int x, int y) {
+        if (NODES == null) {
+            return null;
+        }
+
         for (Node temp : NODES) {
             if (x >= temp.X() && x <= temp.X() + TAM_NODOS
                     && y >= temp.Y() && y <= temp.Y() + TAM_NODOS) {
@@ -250,18 +263,6 @@ public class GraphController {
         EDGES.forEach((Edge edge) -> {
             MATRIZ[edge.init()][edge.end()] = MATRIZ[edge.end()][edge.init()] = (int) edge.getWeight();
         });
-    }
-
-    /**
-     * Seleccionar un nodo en modo visual.
-     *
-     * @param node Nodo.
-     * @param g
-     * @param color
-     */
-    public static void selNode(Node node, Graphics g, Color color) {
-        g.setColor(color);
-        g.drawOval(node.X(), node.Y(), TAM_NODOS - 1, TAM_NODOS - 1);
     }
 
     /**

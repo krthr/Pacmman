@@ -1,8 +1,8 @@
 package Controllers;
 
 import java.util.*;
-import static Controllers.GraphController.getEdges;
-import static Controllers.GraphController.getNodes;
+import static Controllers.graphController.getEdges;
+import static Controllers.graphController.getNodes;
 import Models.Edge;
 import Models.Node;
 
@@ -11,7 +11,7 @@ import Models.Node;
  *
  * @author krthr
  */
-public class DijkstraController {
+public class dijkstraController {
 
     private final List<Node> nodes;
     private final List<Edge> edges;
@@ -20,11 +20,15 @@ public class DijkstraController {
     private Map<Node, Node> predecessors;
     private Map<Node, Integer> distance;
 
-    public DijkstraController() {
+    public dijkstraController() {
         this.nodes = new ArrayList<>(getNodes());
         this.edges = new ArrayList<>(getEdges());
     }
 
+    /**
+     *
+     * @param source
+     */
     public void execute(Node source) {
         settledNodes = new HashSet<>();
         unSettledNodes = new HashSet<>();
@@ -40,6 +44,10 @@ public class DijkstraController {
         }
     }
 
+    /**
+     *
+     * @param node
+     */
     private void findMinimalDistances(Node node) {
         List<Node> adjacentNodes = getNeighbors(node);
         for (Node target : adjacentNodes) {
@@ -54,6 +62,12 @@ public class DijkstraController {
 
     }
 
+    /**
+     *
+     * @param node
+     * @param target
+     * @return
+     */
     private int getDistance(Node node, Node target) {
         for (Edge edge : edges) {
             if (edge.getSource().equals(node)
@@ -64,6 +78,11 @@ public class DijkstraController {
         throw new RuntimeException("Should not happen");
     }
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     private List<Node> getNeighbors(Node node) {
         List<Node> neighbors = new ArrayList<>();
         for (Edge edge : edges) {
@@ -75,6 +94,11 @@ public class DijkstraController {
         return neighbors;
     }
 
+    /**
+     *
+     * @param vertexes
+     * @return
+     */
     private Node getMinimum(Set<Node> vertexes) {
         Node minimum = null;
         for (Node vertex : vertexes) {

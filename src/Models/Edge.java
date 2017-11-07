@@ -1,7 +1,7 @@
 package Models;
 
-import static Controllers.GraphController.TAM_NODOS;
-import static Controllers.GraphController.searchNode;
+import static Controllers.graphController.TAM_NODOS;
+import static Controllers.graphController.searchNode;
 
 /**
  * Modelo de las aristas del grafo.
@@ -69,6 +69,42 @@ public class Edge {
      */
     public int end() {
         return this.end;
+    }
+
+    /**
+     * X inicial
+     *
+     * @return
+     */
+    public int getX1() {
+        return x1;
+    }
+
+    /**
+     * Y inicial
+     *
+     * @return
+     */
+    public int getY1() {
+        return y1;
+    }
+
+    /**
+     * X final
+     *
+     * @return
+     */
+    public int getX2() {
+        return x2;
+    }
+
+    /**
+     * Y final
+     *
+     * @return
+     */
+    public int getY2() {
+        return y2;
     }
 
     /**

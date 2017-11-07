@@ -5,7 +5,7 @@ package Controllers;
  *
  * @author krthr
  */
-public class MapController {
+public class mapController {
 
     /**
      * Cantidad de columnas.

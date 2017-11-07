@@ -1,8 +1,8 @@
 package Models;
 
-import Controllers.AnimationController;
-import static Controllers.BoardController.GAME_HEIGHT;
-import static Controllers.BoardController.GAME_WIDTH;
+import Controllers.animationController;
+import static Controllers.boardController.GAME_HEIGHT;
+import static Controllers.boardController.GAME_WIDTH;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.NONE;
@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
  */
 public class Ghost {
 
-    AnimationController[] animations;
+    animationController[] animations;
     int x;
     int y;
     int vx;
@@ -44,7 +44,7 @@ public class Ghost {
         this.vx = vx;
         this.vy = vy;
         this.currentDirection = -1;
-        animations = new AnimationController[4];
+        animations = new animationController[4];
     }
 
     /**
@@ -56,7 +56,7 @@ public class Ghost {
     public void loadPics(int ghost) throws Exception {
         System.out.println("INFO (Ghost): Cargando sprites...");
         for (int j = 0; j < 4; j++) {
-            animations[j] = new AnimationController();
+            animations[j] = new animationController();
             for (int i = 1; i <= 3; i++) {
                 System.out.println("INFO (Ghost): Sprite - " + ghost);
                 animations[j].addScene(

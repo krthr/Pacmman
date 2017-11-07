@@ -1,18 +1,18 @@
 package Models;
 
-import Controllers.AnimationController;
-import static Controllers.BoardController.GAME_HEIGHT;
-import static Controllers.BoardController.GAME_WIDTH;
-import static Controllers.GameController.GHOSTS;
-import static Controllers.GameController.LIFES;
-import static Controllers.GameController.MAP;
+import Controllers.animationController;
+import static Controllers.boardController.GAME_HEIGHT;
+import static Controllers.boardController.GAME_WIDTH;
+import static Controllers.gameController.GHOSTS;
+import static Controllers.gameController.LIFES;
+import static Controllers.gameController.MAP;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.ImageIcon;
-import static Controllers.GameController.PIXELS;
-import static Controllers.GameController.PRO_X;
-import static Controllers.GameController.PRO_Y;
-import Controllers.MapController;
+import static Controllers.gameController.PIXELS;
+import static Controllers.gameController.PRO_X;
+import static Controllers.gameController.PRO_Y;
+import Controllers.mapController;
 
 /**
  * Modelo de Pacman.
@@ -35,8 +35,8 @@ public class Pacman {
      */
     private int lifes;
 
-    AnimationController[] animations;
-    AnimationController[] death_animations;
+    animationController[] animations;
+    animationController[] death_animations;
     int x, y, vx, vy;
     String path;
     public int currentAnimation, currentDirection;
@@ -58,7 +58,7 @@ public class Pacman {
         this.vy = vy;
         this.currentDirection = -1;
         this.lifes = LIFES;
-        animations = new AnimationController[4];
+        animations = new animationController[4];
     }
 
     /**
@@ -71,7 +71,7 @@ public class Pacman {
         System.out.println("INFO (Pacman): Cargando sprites...");
         for (int j = 0; j < 4; j++) {
             String name = names[j];
-            animations[j] = new AnimationController();
+            animations[j] = new animationController();
             for (int i = 1; i <= 3; i++) {
                 System.out.println("INFO (Pacman): Sprite - " + name + "" + i);
                 animations[j].addScene(
@@ -222,8 +222,8 @@ public class Pacman {
      */
     public boolean touchsWall(Point p) {
         int x = p.x, y = p.y;
-        for (int i = 0; i < MapController.N_Y; i++) {
-            for (int j = 0; j < MapController.N_X; j++) {
+        for (int i = 0; i < mapController.N_Y; i++) {
+            for (int j = 0; j < mapController.N_X; j++) {
                 if (MAP[i][j] == 1) {
                     int h = j * PRO_X, v = i * PRO_Y;
                     if (x > h && x < (j + 1) * PRO_X && y > v && y < (i + 1) * PRO_Y) {

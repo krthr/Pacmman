@@ -1,6 +1,7 @@
 package Models;
 
-import static Controllers.GraphController.NODES_COLOR;
+import static Controllers.graphController.NODES_COLOR;
+import static Controllers.graphController.TAM_NODOS;
 import java.awt.Color;
 
 /**
@@ -24,8 +25,8 @@ public class Node {
      */
     public Node(int id, int x, int y) {
         this.id = id;
-        this.posx = x;
-        this.posy = y;
+        this.posx = x - (TAM_NODOS / 2);
+        this.posy = y - (TAM_NODOS / 2);
         this.color = NODES_COLOR;
     }
 

@@ -1,15 +1,27 @@
 package Controllers;
 
-import static Controllers.MapController.LEVEL1;
-import static Controllers.MapController.N_X;
-import static Controllers.MapController.N_Y;
-import Models.Ghost;
-import Models.Pacman;
+import static Controllers.drawController.selNode;
+import static Controllers.drawController.drawMap;
+import static Controllers.drawController.drawNodes;
+import static Controllers.drawController.drawEdges;
+import static Controllers.drawController.drawEdge;
+import static Controllers.drawController.drawNode;
+import static Controllers.mapController.*;
+import static Controllers.graphController.TAM_NODOS;
+import static Controllers.graphController.searchNearNode;
+import static Controllers.graphController.addEdge;
+import static Controllers.graphController.addNode;
+import static Controllers.graphController.lastEdge;
+import Models.Edge;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.NONE;
 import static Models.Pacman.RIGTH;
 import static Models.Pacman.UP;
+import Models.Ghost;
+import Models.Node;
+import Models.Pacman;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -19,18 +31,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
  *
  * @author krthr
  */
-public class GameController extends java.awt.Canvas {
+public class gameController extends java.awt.Canvas {
 
     /**
      * Frame padre del juego.
@@ -81,8 +92,6 @@ public class GameController extends java.awt.Canvas {
      */
     private static Color WAY_COLOR;
 
-    private boolean DEV_MODE;
-
     /**
      *
      * @param main
@@ -91,7 +100,7 @@ public class GameController extends java.awt.Canvas {
      * @param dev ¿Iniciar en modo desarrollo?
      * @throws Exception
      */
-    public GameController(javax.swing.JFrame main, int w, int h, boolean dev) throws Exception {
+    public gameController(javax.swing.JFrame main, int w, int h, boolean dev) throws Exception {
         this.setSize(w, h);
         this.father = main;
         this.requestFocus();
@@ -105,11 +114,6 @@ public class GameController extends java.awt.Canvas {
                 loadMainThread();
                 loadGhostsThread();
 
-                if (dev) {
-                    DEV_MODE = true;
-                    devMode();
-                }
-
                 MAIN.start();
                 GHOSTS_THREAD.start();
             } catch (Exception ex) {
@@ -117,17 +121,54 @@ public class GameController extends java.awt.Canvas {
         });
     }
 
+    int temp = 0;
+    Node init = null, end = null;
+
     /**
-     * Modo desarrollador. En modo desarrollador
+     * Modo desarrollador. En modo desarrollador se pueden seleccionar y crear
+     * los nodos y las aristas.
      */
-    private void devMode() {
-        int tamNodos = 10;
+    private void devMode(Canvas c) {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                createBufferStrategy(2);
                 Graphics g = getBufferStrategy().getDrawGraphics();
 
-                // TODO
+                if (temp <= 1) {
+                    g.setColor(Color.BLUE);
+                    drawNode(g, e.getX() - (TAM_NODOS / 2), e.getY() - (TAM_NODOS / 2));
+                    addNode(e.getX() - (TAM_NODOS / 2), e.getY() - (TAM_NODOS / 2));
+                    temp++;
+                } else {
+                    temp = 0;
+                    if (init == null) {
+                        init = searchNearNode(e.getX(), e.getY());
+                        if (init != null) {
+                            selNode(init, g, Color.WHITE);
+                        }
+                    } else {
+                        end = searchNearNode(e.getX(), e.getY());
+                        if (end != null) {
+                            selNode(end, g, Color.red);
+                            if (end.id() != init.id()) {
+                                g.setColor(Color.black);
+
+                                drawEdge(g, init.X() + TAM_NODOS / 2, end.X() + TAM_NODOS / 2, init.Y() + TAM_NODOS / 2, end.Y() + TAM_NODOS / 2);
+                                addEdge(init, end);
+                                System.out.println("distancia: " + lastEdge().getWeight());
+                            } else {
+                                selNode(init, g, Color.black);
+                            }
+                            selNode(init, g, Color.black);
+                            selNode(end, g, Color.black);
+                            init = null;
+                        } else {
+                            selNode(init, g, Color.black);
+                            init = null;
+                        }
+                    }
+                }
             }
 
             @Override
@@ -261,7 +302,7 @@ public class GameController extends java.awt.Canvas {
      *
      * @param game
      */
-    public static void startGame(Controllers.GameController game) {
+    public static void startGame(Controllers.gameController game) {
         game.MAIN.start();
         game.GHOSTS_THREAD.start();
     }
@@ -293,15 +334,19 @@ public class GameController extends java.awt.Canvas {
                 try {
                     g.setColor(Color.BLACK);
                     g.fillRect(0, 0, getWidth(), getHeight());
+
                     drawMap(g);
+                    drawEdges(g);
+                    drawNodes(g);
+
                     currentTime = System.currentTimeMillis() - startTime;
 
                     Point next = PACMAN.getNextPos();
                     if (PACMAN.isOut(next)) {
-                        System.out.println("INFO (Game): Pacman fuera.");
+                        // System.out.println("INFO (Game): Pacman fuera.");
                         PACMAN.currentDirection = NONE;
                     } else if (PACMAN.touchsWall(next)) {
-                        // System.out.println("INFO (GameController): Pacman pared");
+                        // System.out.println("INFO (gameController): Pacman pared");
                         PACMAN.currentDirection = NONE;
                     }
 
@@ -324,14 +369,14 @@ public class GameController extends java.awt.Canvas {
                         }
                     }
 
-                    System.out.println("POS: (" + PACMAN.X() + "," + PACMAN.Y() + ")");
+                    // System.out.println("POS: (" + PACMAN.X() + "," + PACMAN.Y() + ")");
                     PACMAN.draw(g);
                     drawGhosts(g);
 
                     Thread.sleep(FPS);
                     getBufferStrategy().show();
                 } catch (Exception e) {
-                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + e);
+                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + Arrays.toString(e.getStackTrace()));
                 }
 
             }
@@ -367,7 +412,7 @@ public class GameController extends java.awt.Canvas {
                         try {
                             Thread.sleep(10);
                         } catch (InterruptedException ex) {
-                            Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(gameController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
 
@@ -420,23 +465,6 @@ public class GameController extends java.awt.Canvas {
             }
 
         });
-    }
-
-    /**
-     * Dibujar mapa.
-     */
-    private void drawMap(Graphics g) {
-        for (int i = 0; i < N_Y; i++) {
-            for (int j = 0; j < N_X; j++) {
-                if (MAP[i][j] == 1) {
-                    g.setColor(Color.black);
-                    g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
-                } else {
-                    g.setColor(Color.blue);
-                    g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
-                }
-            }
-        }
     }
 
     /**
