@@ -47,6 +47,10 @@ public class gameController extends java.awt.Canvas {
      * Caracteres del juego.
      */
     public Models.Pacman PACMAN;
+
+    /**
+     * Lista de fantasmas.
+     */
     public static Ghost[] GHOSTS;
 
     private final int FPS = 10;
@@ -116,16 +120,11 @@ public class gameController extends java.awt.Canvas {
      */
     private void loadData(int w, int h) throws Exception {
         System.out.println("INFO (Game): Cargando datos...");
-
         MAP = LEVEL1;
         PRO_X = w / 25;
         PRO_Y = h / 15;
         PIXELS = 22;
-        /**
-         * Juego en pausa.
-         */
         PAUSE = false;
-
     }
 
     /**
@@ -261,13 +260,6 @@ public class gameController extends java.awt.Canvas {
                     currentTime = System.currentTimeMillis() - startTime;
 
                     Point next = PACMAN.getNextPos();
-                    if (PACMAN.isOut(next)) {
-                        // System.out.println("INFO (Game): Pacman fuera.");
-                        PACMAN.currentDirection = NONE;
-                    } else if (PACMAN.touchsWall(next)) {
-                        // System.out.println("INFO (gameController): Pacman pared");
-                        PACMAN.currentDirection = NONE;
-                    }
 
                     switch (PACMAN.currentDirection) {
                         case RIGTH: {

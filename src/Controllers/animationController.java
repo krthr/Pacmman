@@ -20,19 +20,12 @@ public class animationController {
         sceneIndex = 0;
     }
 
-    /**
-     *
-     */
     public animationController() {
         scenes = new ArrayList<>();
         totalTime = 0;
         start();
     }
 
-    /**
-     *
-     * @param timePassed
-     */
     public synchronized void update(long timePassed) {
         if (scenes.size() > 1) {
             if (timePassed > totalTime) {
@@ -48,11 +41,6 @@ public class animationController {
         }
     }
 
-    /**
-     *
-     * @param i
-     * @param t
-     */
     public synchronized void addScene(Image i, long t) {
         totalTime += t;
         scenes.add(new OneScene(i, totalTime));

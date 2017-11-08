@@ -20,14 +20,17 @@ public class dijkstraController {
     private Map<Node, Node> predecessors;
     private Map<Node, Integer> distance;
 
+    /**
+     * Crear uno nuevo controlador.
+     */
     public dijkstraController() {
         this.nodes = new ArrayList<>(getNodes());
         this.edges = new ArrayList<>(getEdges());
     }
 
     /**
-     *
-     * @param source
+     * Ejecutar Dijkstra.
+     * @param source Nodo desde donde se partirá.
      */
     public void execute(Node source) {
         settledNodes = new HashSet<>();
@@ -75,11 +78,11 @@ public class dijkstraController {
                 return edge.getWeight();
             }
         }
-        throw new RuntimeException("Should not happen");
+        throw new RuntimeException("ERROR (Dijkstra): Ocurrió un error al tratar de obtener la distancia entre dos nodos.");
     }
 
     /**
-     *
+     * Obtener los vecinos de un nodo.
      * @param node
      * @return
      */

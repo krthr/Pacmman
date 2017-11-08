@@ -24,7 +24,6 @@ public class Edge {
      * @param y1 Y del nodo inicial
      * @param x2 X del nodo final
      * @param y2 Y del nodo final
-     * @param dist
      */
     public Edge(int init, int end, int x1, int y1, int x2, int y2) {
         this.init = init;
@@ -37,26 +36,9 @@ public class Edge {
     }
 
     /**
-     * Constructor de aristas.
-     *
-     * @param init Nodo inicial
-     * @param end Nodo final
-     * @param dist
-     */
-    public Edge(Node init, Node end, int dist) {
-        this.init = init.id();
-        this.end = end.id();
-        this.x1 = init.X();
-        this.y1 = init.Y();
-        this.x2 = end.X();
-        this.y2 = end.Y();
-        this.dist = dist;
-    }
-
-    /**
      * Obtener ID del nodo inicial.
      *
-     * @return
+     * @return El ID del nodo inicial.
      */
     public int init() {
         return this.init;
@@ -65,7 +47,7 @@ public class Edge {
     /**
      * Obtener ID del nodo final.
      *
-     * @return
+     * @return El ID del nodo final.
      */
     public int end() {
         return this.end;
@@ -74,7 +56,7 @@ public class Edge {
     /**
      * X inicial
      *
-     * @return
+     * @return Obtener la posición en X de la arista inicial
      */
     public int getX1() {
         return x1;
@@ -83,7 +65,7 @@ public class Edge {
     /**
      * Y inicial
      *
-     * @return
+     * @return Obtener la posición en Y de la arista inicial
      */
     public int getY1() {
         return y1;
@@ -92,7 +74,7 @@ public class Edge {
     /**
      * X final
      *
-     * @return
+     * @return Obtener la posición en X de la arista final
      */
     public int getX2() {
         return x2;
@@ -101,7 +83,7 @@ public class Edge {
     /**
      * Y final
      *
-     * @return
+     * @return Obtener la posición en Y de la arista final
      */
     public int getY2() {
         return y2;
@@ -110,7 +92,7 @@ public class Edge {
     /**
      * Obtener peso de la arista.
      *
-     * @return
+     * @return El peso de la arista.
      */
     public int getWeight() {
         return this.dist;

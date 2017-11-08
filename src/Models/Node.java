@@ -1,7 +1,6 @@
 package Models;
 
 import static Controllers.graphController.NODES_COLOR;
-import static Controllers.graphController.TAM_NODOS;
 import java.awt.Color;
 
 /**
@@ -19,9 +18,9 @@ public class Node {
     /**
      * Constructor de nodo.
      *
-     * @param id
-     * @param x
-     * @param y
+     * @param id ID del nodo.
+     * @param x Posición en X
+     * @param y Posición en Y
      */
     public Node(int id, int x, int y) {
         this.id = id;
@@ -33,7 +32,7 @@ public class Node {
     /**
      * ID del nodo.
      *
-     * @return
+     * @return El ID del nodo.
      */
     public int id() {
         return this.id;
@@ -42,7 +41,7 @@ public class Node {
     /**
      * Color del nodo.
      *
-     * @return
+     * @return El color del nodo.
      */
     public Color color() {
         return this.color;
@@ -51,7 +50,7 @@ public class Node {
     /**
      * Posición en Y.
      *
-     * @return
+     * @return La posición en Y del nodo
      */
     public int Y() {
         return this.posy;
@@ -60,7 +59,7 @@ public class Node {
     /**
      * Posición en X.
      *
-     * @return
+     * @return La posición en X del nodo
      */
     public int X() {
         return this.posx;

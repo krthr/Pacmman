@@ -3,17 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/GraphController.java</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/nodes.txt</file>
+            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/drawController.java</file>
+            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/gameController.java</file>
             <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/Edge.java</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/BoardController.java</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/Ghost.java</file>
             <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/Node.java</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/edges.txt</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/GameController.java</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/AnimationController.java</file>
+            <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/Ghost.java</file>
+            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/dijkstraController.java</file>
+            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/graphController.java</file>
+            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/animationController.java</file>
             <file>file:/C:/Users/admin/Documents/Pacmman/src/Models/Pacman.java</file>
-            <file>file:/C:/Users/admin/Documents/Pacmman/src/Controllers/DijkstraController.java</file>
         </group>
     </open-files>
 </project-private>

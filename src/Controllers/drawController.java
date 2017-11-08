@@ -5,16 +5,14 @@ import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
 import java.awt.Graphics;
 import static Controllers.graphController.NODES_COLOR;
-import static Controllers.graphController.TAM_NODOS;
 import static Controllers.graphController.getEdges;
 import static Controllers.graphController.getNodes;
 import static Controllers.mapController.N_X;
 import static Controllers.mapController.N_Y;
-import Models.Node;
 import java.awt.Color;
 
 /**
- *
+ * Controlador con las funciones básicas necesarias para dibujar elementos.
  * @author krthr
  */
 public class drawController {
@@ -29,37 +27,25 @@ public class drawController {
     public final static Color WAY_COLOR = Color.BLACK;
 
     /**
-     * Seleccionar un nodo en modo visual.
-     *
-     * @param node Nodo.
-     * @param g
-     * @param color
-     */
-    public static void selNode(Node node, Graphics g, Color color) {
-        g.setColor(color);
-        g.drawOval(node.X(), node.Y(), TAM_NODOS - 1, TAM_NODOS - 1);
-    }
-
-    /**
      * Dibujar nodos del grafo.
      *
-     * @param g
+     * @param g Gráfico donde se dibujará.
      */
     public static void drawNodes(Graphics g) {
         if (getNodes() == null) {
             return;
         }
 
-        for (Node temp : getNodes()) {
-            // drawNode(g, temp.X(), temp.Y());
-            drawOvalNode(g, temp.X(), temp.Y());
-        }
+        getNodes().forEach((temp) -> {
+            drawNode(g, temp.X(), temp.Y());
+            // drawOvalNode(g, temp.X(), temp.Y());
+        });
     }
 
     /**
-     * Dibujar nodo.
+     * Dibujar nodo de forma cuadrada.
      *
-     * @param g
+     * @param g Gráfico donde se dibujará.
      * @param x Posición en X
      * @param y Posición en Y
      */
@@ -68,6 +54,12 @@ public class drawController {
         g.drawRect(x, y, PRO_X, PRO_Y);
     }
 
+    /**
+     * Dibujar nodo de forma esférica.
+     * @param g Gráfico donde se dibujará.
+     * @param x Coordenada en X del óvalo
+     * @param y Coordenada en Y del óvalo
+     */
     public static void drawOvalNode(Graphics g, int x, int y) {
         g.setColor(NODES_COLOR);
         g.fillOval(x + PRO_X / 4, y + PRO_Y / 4, PRO_X / 2, PRO_Y / 2);
@@ -76,7 +68,7 @@ public class drawController {
     /**
      * Dibujar todas las aristas
      *
-     * @param g
+     * @param g Gráfico donde se dibujará.
      */
     public static void drawEdges(Graphics g) {
         if (getEdges() == null) {
@@ -93,11 +85,11 @@ public class drawController {
     /**
      * Dibujar una arista
      *
-     * @param g
-     * @param x1
-     * @param x2
-     * @param y1
-     * @param y2
+     * @param g Gráfico donde se dibujará.
+     * @param x1 X de punto inicial
+     * @param x2 X de punto final
+     * @param y1 Y de punto inicial
+     * @param y2 Y de punto final
      */
     public static void drawEdge(Graphics g, int x1, int x2, int y1, int y2) {
         g.setColor(NODES_COLOR);
@@ -107,7 +99,7 @@ public class drawController {
     /**
      * Dibujar mapa.
      *
-     * @param g
+     * @param g Gráfico donde se dibujará.
      */
     public static void drawMap(Graphics g) {
         for (int i = 0; i < N_Y; i++) {

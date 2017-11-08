@@ -13,7 +13,7 @@ import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
 import static Controllers.graphController.getNodes;
-import Controllers.mapController;
+import java.util.Map;
 
 /**
  * Modelo de Pacman.
@@ -130,7 +130,7 @@ public class Pacman {
     /**
      * Dibujar.
      *
-     * @param g
+     * @param g Gráfico donde se dibujará.
      */
     public void draw(Graphics g) {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
@@ -139,7 +139,7 @@ public class Pacman {
     /**
      * Obtener posición en X
      *
-     * @return
+     * @return La posición en X del pacman
      */
     public int X() {
         return this.x;
@@ -148,7 +148,7 @@ public class Pacman {
     /**
      * Obtener posición en Y
      *
-     * @return
+     * @return La posición en Y del Pacman
      */
     public int Y() {
         return this.y;
@@ -181,64 +181,15 @@ public class Pacman {
 
         return temp;
     }
-
-    /**
-     * Verificar si Pacman está fuera del tablero.
-     *
-     * @param p
-     * @return
-     */
-    public boolean isOut(Point p) {
-        return p.x < 0 || p.y < 0 || (p.x + 32) > GAME_WIDTH || (p.y + 32) > GAME_HEIGHT;
-    }
-
-    /**
-     * Verificar si Pacman es tocado por algún fantasma.
-     *
-     * @return
-     */
-    public boolean isKilled() {
-        for (Ghost temp : GHOSTS) {
-            int a = temp.X(), b = temp.Y();
-            if (x == a && y == b) {
-                return true;
-            } else if (x > a && x + PIXELS < a + PIXELS && x < a + PIXELS && y > b && y < b + PIXELS) {
-                return true;
-            } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b + PIXELS) {
-                return true;
-            } else if (x > a && x < a + PIXELS && x + PIXELS > a + PIXELS && y < b && y + PIXELS > b && y + PIXELS < b + PIXELS) {
-                return true;
-            } else if (x < a && x + PIXELS > a && y > b && y + PIXELS > b) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @param p
-     * @return
-     */
-    public boolean touchsWall(Point p) {
-        return false;
-    }
-
+ 
     /**
      * ¿Está Pacman muerto?
      *
-     * @return
+     * @return True si Pacman está muerto. False si no
      */
     public boolean isDead() {
         return this.lifes <= 0;
     }
 
-    /**
-     * Disminuir en 1 las vidas del Pacman.
-     */
-    public void minusLife() {
-        this.lifes--;
-    }
 
 }

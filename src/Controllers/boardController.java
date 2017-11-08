@@ -3,10 +3,6 @@ package Controllers;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import static Controllers.graphController.loadGraph;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Controlador principal del juego. A éste JFrame se agrega el canvas del juego.
@@ -32,7 +28,7 @@ public class boardController extends javax.swing.JFrame {
      */
     public boardController() {
         initComponents();
-        setSize(1000, 600);
+        this.setSize(1000, 600);
         this.arrowOp2.setVisible(false);
         INIT = false;
         addKeyEvent(this);
@@ -98,7 +94,7 @@ public class boardController extends javax.swing.JFrame {
 
         mainPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        mainTitle = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         txtOp1 = new javax.swing.JLabel();
@@ -120,11 +116,11 @@ public class boardController extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 0), 5));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Century Schoolbook", 0, 48)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("P  A  C  M  A  N");
+        mainTitle.setBackground(new java.awt.Color(255, 255, 255));
+        mainTitle.setFont(new java.awt.Font("Century Schoolbook", 0, 48)); // NOI18N
+        mainTitle.setForeground(new java.awt.Color(255, 255, 255));
+        mainTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mainTitle.setText("P  A  C  M  A  N");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -132,14 +128,14 @@ public class boardController extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                .addComponent(mainTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                .addComponent(mainTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -301,12 +297,12 @@ public class boardController extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel arrowOp1;
     private javax.swing.JLabel arrowOp2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JLabel mainTitle;
     private javax.swing.JLabel txtOp1;
     private javax.swing.JLabel txtOp5;
     // End of variables declaration//GEN-END:variables
