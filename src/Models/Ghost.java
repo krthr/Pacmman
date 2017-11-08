@@ -51,7 +51,7 @@ public class Ghost {
      * Cargar sprites.
      *
      * @param ghost Numero de fantasma.
-     * @throws Exception
+     * @throws Exception Archivo no encontrado.
      */
     public void loadPics(int ghost) throws Exception {
         System.out.println("INFO (Ghost): Cargando sprites...");
@@ -68,7 +68,6 @@ public class Ghost {
 
     /**
      * Mover a la derecha.
-     *
      * @param time
      */
     public void moveRigth(long time) {
@@ -79,7 +78,6 @@ public class Ghost {
 
     /**
      * Mover a la izquierda.
-     *
      * @param time
      */
     public void moveLeft(long time) {
@@ -90,7 +88,6 @@ public class Ghost {
 
     /**
      * Mover a arriba.
-     *
      * @param time
      */
     public void moveUp(long time) {
@@ -101,7 +98,6 @@ public class Ghost {
 
     /**
      * Mover abajo.
-     *
      * @param time
      */
     public void moveDown(long time) {
