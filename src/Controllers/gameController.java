@@ -254,8 +254,7 @@ public class gameController extends java.awt.Canvas {
                     g.fillRect(0, 0, getWidth(), getHeight());
 
                     drawMap(g);
-                    drawNodes(g);
-                    drawEdges(g);
+                    // drawNodes(g);
 
                     currentTime = System.currentTimeMillis() - startTime;
 

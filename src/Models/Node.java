@@ -2,6 +2,7 @@ package Models;
 
 import static Controllers.graphController.NODES_COLOR;
 import java.awt.Color;
+import java.awt.Image;
 
 /**
  * Modelo de los nodos del grafo.
@@ -14,6 +15,8 @@ public class Node {
     private final int posx;
     private final int posy;
     private final Color color;
+    private final boolean isCoin;
+    private final Image image;
 
     /**
      * Constructor de nodo.
@@ -21,12 +24,16 @@ public class Node {
      * @param id ID del nodo.
      * @param x Posición en X
      * @param y Posición en Y
+     * @param isCoin ¿El nodo tiene un coin?
+     * @param image Imágen del camino
      */
-    public Node(int id, int x, int y) {
+    public Node(int id, int x, int y, boolean isCoin, Image image) {
         this.id = id;
         this.posx = x;
         this.posy = y;
         this.color = NODES_COLOR;
+        this.isCoin = isCoin;
+        this.image = image;
     }
 
     /**

@@ -9,7 +9,6 @@ import Models.Edge;
 import Models.Node;
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -54,7 +53,7 @@ public class graphController {
     /**
      * Obtener la lista de nodos.
      *
-     * @return
+     * @return Lista de nodos.
      */
     public static ArrayList<Node> getNodes() {
         return NODES;
@@ -63,26 +62,16 @@ public class graphController {
     /**
      * Obtener la lista de aristas.
      *
-     * @return
+     * @return Lista de aristas.
      */
     public static ArrayList<Edge> getEdges() {
         return EDGES;
     }
 
-    public static Edge lastEdge() {
-        if (EDGES == null) {
-            return null;
-        }
-
-        return EDGES.get(EDGES.size() - 1);
-    }
-
     /**
      * Cargar datos del grafo desde un archivo de texto.
-     *
-     * @throws java.io.IOException
      */
-    public static void loadGraph() throws IOException {
+    public static void loadGraph() {
 
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
@@ -111,16 +100,6 @@ public class graphController {
 
     public static void loadEdges() {
         // TODO
-    }
-
-    private static int toInt(String str) {
-        try {
-            return Integer.parseInt(str);
-        } catch (NumberFormatException ex) {
-
-            System.err.println("ERROR (Graph): Error al convertir un string a entero. \n" + ex);
-            return -1;
-        }
     }
 
     /**
@@ -157,11 +136,11 @@ public class graphController {
     /**
      * Añadir nuevo nodo al grafo.
      *
-     * @param x
-     * @param y
+     * @param x Posición en X
+     * @param y Posición en Y
      */
     private static void addNode(int x, int y) {
-        Node temp = new Node(N_ID, x, y);
+        Node temp = new Node(N_ID, x, y, false, null);
 
         if (NODES == null) {
             NODES = new ArrayList<>();
@@ -189,9 +168,9 @@ public class graphController {
     /**
      * Buscar nodo.
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x Posición en X
+     * @param y Posición en Y
+     * @return El nodo, si fue encontrado. NULL si no fue encontrado.
      */
     private static Node searchNode(int x, int y) {
         if (NODES == null) {
@@ -206,7 +185,5 @@ public class graphController {
 
         return null;
     }
-    
-    
 
 }

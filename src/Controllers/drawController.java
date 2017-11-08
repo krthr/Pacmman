@@ -10,13 +10,30 @@ import static Controllers.graphController.getNodes;
 import static Controllers.mapController.N_X;
 import static Controllers.mapController.N_Y;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.util.Random;
+import javax.swing.ImageIcon;
 
 /**
  * Controlador con las funciones básicas necesarias para dibujar elementos.
+ *
  * @author krthr
  */
 public class drawController {
 
+    /**
+     *
+     */
+    public final static Image WALL_IMG = (new ImageIcon(drawController.class.getClass()
+            .getResource("/Assets/wall.jpg"))).getImage();
+    public final static Image[] WAY_IMG = {
+        (new ImageIcon(drawController.class.getClass()
+            .getResource("/Assets/way.jpg"))).getImage(),
+        (new ImageIcon(drawController.class.getClass()
+            .getResource("/Assets/way2.jpg"))).getImage()
+    };
     /**
      * Color de las paredes.
      */
@@ -56,6 +73,7 @@ public class drawController {
 
     /**
      * Dibujar nodo de forma esférica.
+     *
      * @param g Gráfico donde se dibujará.
      * @param x Coordenada en X del óvalo
      * @param y Coordenada en Y del óvalo
@@ -102,14 +120,14 @@ public class drawController {
      * @param g Gráfico donde se dibujará.
      */
     public static void drawMap(Graphics g) {
+        Random rn = new Random();
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
                 if (MAP[i][j] == 1) {
-                    g.setColor(WALL_COLOR);
-                    g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
+                    g.drawImage(WALL_IMG, j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
                 } else {
-                    g.setColor(WAY_COLOR);
-                    g.fillRect(j * PRO_X, i * PRO_Y, PRO_X, PRO_Y);
+                    int a = rn.nextInt(1 - 0 + 1) + 0;
+                    g.drawImage(WAY_IMG[0], j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
                 }
             }
         }

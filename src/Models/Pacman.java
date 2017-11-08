@@ -1,19 +1,10 @@
 package Models;
 
 import Controllers.animationController;
-import static Controllers.boardController.GAME_HEIGHT;
-import static Controllers.boardController.GAME_WIDTH;
-import static Controllers.gameController.GHOSTS;
 import static Controllers.gameController.LIFES;
-import static Controllers.gameController.MAP;
 import java.awt.Graphics;
 import java.awt.Point;
 import javax.swing.ImageIcon;
-import static Controllers.gameController.PIXELS;
-import static Controllers.gameController.PRO_X;
-import static Controllers.gameController.PRO_Y;
-import static Controllers.graphController.getNodes;
-import java.util.Map;
 
 /**
  * Modelo de Pacman.
