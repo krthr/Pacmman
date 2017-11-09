@@ -2,8 +2,6 @@ package Models;
 
 import Controllers.animationController;
 import static Controllers.gameController.LIFES;
-import java.awt.Graphics;
-import java.awt.Point;
 import javax.swing.ImageIcon;
 
 /**
@@ -11,27 +9,12 @@ import javax.swing.ImageIcon;
  *
  * @author krthr
  */
-public class Pacman {
-
-    /**
-     * Código de las direcciones.
-     */
-    public static final int UP = 0,
-            RIGTH = 1,
-            DOWN = 2,
-            LEFT = 3,
-            NONE = -1;
+public class Pacman extends Character {
 
     /**
      * Cantidad de vidas.
      */
-    private int lifes;
-
-    animationController[] animations;
-    animationController[] death_animations;
-    int x, y, vx, vy;
-    String path;
-    public int currentAnimation, currentDirection;
+    private final int lifes;
 
     /**
      * Pacman.
@@ -43,14 +26,8 @@ public class Pacman {
      * @param path
      */
     public Pacman(int x, int y, int vx, int vy, String path) {
-        this.path = path;
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.currentDirection = -1;
+        super(x, y, vx, vy, path);
         this.lifes = LIFES;
-        animations = new animationController[4];
     }
 
     /**
@@ -67,112 +44,13 @@ public class Pacman {
             for (int i = 1; i <= 3; i++) {
                 System.out.println("INFO (Pacman): Sprite - " + name + "" + i);
                 animations[j].addScene(
-                        new ImageIcon(getClass().getResource("/Assets/" + name + i + ".gif")).getImage(),
+                        new ImageIcon(getClass().getResource("/Assets/" + name + i + ".png")).getImage(),
                         100);
             }
         }
 
     }
 
-    /**
-     * Mover a la derecha.
-     *
-     * @param time
-     */
-    public void moveRigth(long time) {
-        x += vx;
-        currentAnimation = RIGTH;
-        animations[RIGTH].update(time);
-    }
-
-    /**
-     * Mover a la izquierda.
-     *
-     * @param time
-     */
-    public void moveLeft(long time) {
-        x -= vx;
-        currentAnimation = LEFT;
-        animations[LEFT].update(time);
-    }
-
-    /**
-     * Mover a arriba.
-     *
-     * @param time
-     */
-    public void moveUp(long time) {
-        y -= vy;
-        currentAnimation = UP;
-        animations[UP].update(time);
-    }
-
-    /**
-     * Mover abajo.
-     *
-     * @param time
-     */
-    public void moveDown(long time) {
-        y += vy;
-        currentAnimation = DOWN;
-        animations[DOWN].update(time);
-    }
-
-    /**
-     * Dibujar.
-     *
-     * @param g Gráfico donde se dibujará.
-     */
-    public void draw(Graphics g) {
-        g.drawImage(animations[currentAnimation].getImage(), x, y, null);
-    }
-
-    /**
-     * Obtener posición en X
-     *
-     * @return La posición en X del pacman
-     */
-    public int X() {
-        return this.x;
-    }
-
-    /**
-     * Obtener posición en Y
-     *
-     * @return La posición en Y del Pacman
-     */
-    public int Y() {
-        return this.y;
-    }
-
-    /**
-     * Obtener la futura posición del pacman según movimiento.
-     *
-     * @return
-     */
-    public Point getNextPos() {
-        Point temp = null;
-        switch (currentDirection) {
-            case NONE:
-                temp = new Point(x, y);
-                break;
-            case UP:
-                temp = new Point(x, y - vy);
-                break;
-            case RIGTH:
-                temp = new Point(x + vx, y);
-                break;
-            case LEFT:
-                temp = new Point(x - vx, y);
-                break;
-            case DOWN:
-                temp = new Point(x, y + vy);
-                break;
-        }
-
-        return temp;
-    }
- 
     /**
      * ¿Está Pacman muerto?
      *
@@ -181,6 +59,5 @@ public class Pacman {
     public boolean isDead() {
         return this.lifes <= 0;
     }
-
 
 }

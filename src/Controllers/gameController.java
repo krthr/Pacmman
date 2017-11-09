@@ -1,8 +1,6 @@
 package Controllers;
 
-import static Controllers.drawController.drawEdges;
 import static Controllers.drawController.drawMap;
-import static Controllers.drawController.drawNodes;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
 import static Models.Pacman.DOWN;
@@ -16,14 +14,11 @@ import Models.Pacman;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
@@ -75,7 +70,7 @@ public class gameController extends java.awt.Canvas {
      * Tamaño en pixeles de los sprites.
      */
     public static int PIXELS;
-    private boolean PAUSE;
+    private static boolean PAUSE;
 
     /**
      *
@@ -137,7 +132,7 @@ public class gameController extends java.awt.Canvas {
     private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[1];
 
-        GHOSTS[0] = new Ghost(468, 280, 5, 5, "Ghost0");
+        GHOSTS[0] = new Ghost(468, 280, 10, 10, "Ghost0");
         GHOSTS[0].loadPics(0);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
@@ -238,27 +233,15 @@ public class gameController extends java.awt.Canvas {
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
 
-            showHorWall();
             while (true) {
-
-                while (PAUSE) {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ex) {
-                        System.err.println("ERROR (Game): Hubo un error al tratar de pausar el juego.");
-                    }
-                }
 
                 try {
                     g.setColor(Color.BLACK);
                     g.fillRect(0, 0, getWidth(), getHeight());
 
                     drawMap(g);
-                    // drawNodes(g);
 
                     currentTime = System.currentTimeMillis() - startTime;
-
-                    Point next = PACMAN.getNextPos();
 
                     switch (PACMAN.currentDirection) {
                         case RIGTH: {
@@ -279,7 +262,6 @@ public class gameController extends java.awt.Canvas {
                         }
                     }
 
-                    // System.out.println("POS: (" + PACMAN.X() + "," + PACMAN.Y() + ")");
                     PACMAN.draw(g);
                     drawGhosts(g);
 
@@ -317,15 +299,6 @@ public class gameController extends java.awt.Canvas {
                 Random rn = new Random();
 
                 while (true) {
-
-                    while (PAUSE) {
-                        try {
-                            Thread.sleep(10);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(gameController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
                     try {
                         currentTime = System.currentTimeMillis() - startTime;
 
@@ -349,23 +322,6 @@ public class gameController extends java.awt.Canvas {
                             }
                         }
 
-                        if (GHOSTS[0].isOut(GHOSTS[0].X(), GHOSTS[0].Y())) {
-                            switch (temp) {
-                                case 1:
-                                    GHOSTS[0].moveDown(currentTime);
-                                    break;
-                                case 2:
-                                    GHOSTS[0].moveUp(currentTime);
-                                    break;
-                                case 3:
-                                    GHOSTS[0].moveLeft(currentTime);
-                                    break;
-                                case 4:
-                                    GHOSTS[0].moveRigth(currentTime);
-                                    break;
-                            }
-                        }
-
                         Thread.sleep(40);
                     } catch (InterruptedException e) {
 
@@ -378,21 +334,11 @@ public class gameController extends java.awt.Canvas {
     }
 
     /**
-     * Mostrar una ventana con un mensaje de error.
+     * Ver si el juego está pausado.
+     * @return True si está pausado. False si no está pausado.
      */
-    private void showMessage(String msg) {
-        javax.swing.JOptionPane.showMessageDialog(father, msg, "P A C M M A N", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
-
-    void showHorWall() {
-        for (int i = 0; i < N_X; i++) {
-            System.out.print(i * PRO_X + " ");
-        }
-
-        System.out.println("");
-        for (int i = 0; i < N_Y; i++) {
-            System.out.print(i * PRO_Y + " ");
-        }
+    public static boolean isPaused() {
+        return PAUSE;
     }
 
 }
