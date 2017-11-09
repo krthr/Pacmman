@@ -4,6 +4,9 @@ import Controllers.animationController;
 import static Controllers.gameController.MAP;
 import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
+import static Controllers.gameController.PRO_Y;
+import static Controllers.graphController.getNodes;
+import static Controllers.graphController.searchNode;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.RIGTH;
@@ -35,6 +38,7 @@ public class Character {
 
     /**
      * Constructor.
+     *
      * @param x Posición en X
      * @param y Posición en Y
      * @param vx Velocidad en X
@@ -78,7 +82,7 @@ public class Character {
         if (isPaused()) {
             return;
         }
-        int x = this.x + PIXELS - vx + 3;
+        int x = this.x + PIXELS + vx;
         if (MAP[toI(y + (PIXELS / 2))][toI(x)] == 0
                 && MAP[toI(y)][toI(x)] == 0
                 && MAP[toI(y + PIXELS)][toI(x)] == 0) {
@@ -98,7 +102,7 @@ public class Character {
         if (isPaused()) {
             return;
         }
-        int x = this.x - vx + 1;
+        int x = this.x - vx;
         if (MAP[toI(y + (PIXELS / 2))][toI(x)] == 0
                 && MAP[toI(y)][toI(x)] == 0
                 && MAP[toI(y + PIXELS)][toI(x)] == 0) {
@@ -160,6 +164,23 @@ public class Character {
      */
     public void draw(Graphics g) {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
+    }
+
+    public Node actualNode() {
+        Node temp = getNode(x + PIXELS / 2, y + PIXELS / 2);
+        return temp;
+    }
+
+    private Node getNode(int x, int y) {
+        Node se = null;
+        for (Node temp : getNodes()) {
+            if (x > temp.X() && y > temp.Y() && x < temp.X() + PRO_X && y < temp.Y() + PRO_Y) {
+                se = temp;
+                break;
+            }
+        }
+        
+        return se;
     }
 
 }

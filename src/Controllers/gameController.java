@@ -3,6 +3,8 @@ package Controllers;
 import static Controllers.drawController.drawEdges;
 import static Controllers.drawController.drawGhosts;
 import static Controllers.drawController.drawMap;
+import static Controllers.drawController.drawNodes;
+import static Controllers.drawController.drawPath;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
 import static Models.Pacman.DOWN;
@@ -20,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -43,7 +46,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Caracteres del juego.
      */
-    public Models.Pacman PACMAN;
+    public static Pacman PACMAN;
 
     /**
      * Lista de fantasmas.
@@ -73,6 +76,7 @@ public class gameController extends java.awt.Canvas {
      */
     public static int PIXELS;
     private static boolean PAUSE;
+    private static LinkedList<Node> SORTESTPATH;
 
     /**
      *
@@ -134,11 +138,11 @@ public class gameController extends java.awt.Canvas {
     private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[1];
 
-        GHOSTS[0] = new Ghost(468, 280, 10, 10, "Ghost0");
+        GHOSTS[0] = new Ghost(468, 280, 5, 5, "Ghost0");
         GHOSTS[0].loadPics(0);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
-        PACMAN = new Pacman(468, 366, 2, 2, "Pacman");
+        PACMAN = new Pacman(468, 366, 3, 3, "Pacman");
         PACMAN.loadPics(names);
         PACMAN.currentDirection = RIGTH;
     }
@@ -235,8 +239,6 @@ public class gameController extends java.awt.Canvas {
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
             
-            
-
             while (true) {
 
                 try {
@@ -244,9 +246,11 @@ public class gameController extends java.awt.Canvas {
                     g.fillRect(0, 0, getWidth(), getHeight());
 
                     drawMap(g);
+                    // drawNodes(g);
                     // drawEdges(g);
                     
-                    GHOSTS[0].getSortestPathToPacman(g);
+                    drawPath(g);
+                    
                     currentTime = System.currentTimeMillis() - startTime;
 
                     switch (PACMAN.currentDirection) {
@@ -274,7 +278,7 @@ public class gameController extends java.awt.Canvas {
                     Thread.sleep(FPS);
                     getBufferStrategy().show();
                 } catch (Exception e) {
-                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + e.getMessage());
+                    System.out.println("ERROR (Game): Error en el hilo principal. \n" + Arrays.toString(e.getStackTrace()));
                 }
 
             }
@@ -296,7 +300,8 @@ public class gameController extends java.awt.Canvas {
                 while (true) {
                     try {
                         currentTime = System.currentTimeMillis() - startTime;
-                        Thread.sleep(40);
+                        SORTESTPATH = GHOSTS[0].getSortestPathToPacman(null);
+                        Thread.sleep(FPS);
                     } catch (InterruptedException e) {
 
                     }
@@ -315,4 +320,7 @@ public class gameController extends java.awt.Canvas {
         return PAUSE;
     }
 
+    public static LinkedList<Node> getPath() {
+        return SORTESTPATH;
+    }
 }

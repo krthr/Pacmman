@@ -4,6 +4,7 @@ import static Controllers.gameController.GHOSTS;
 import static Controllers.gameController.MAP;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
+import static Controllers.gameController.getPath;
 import java.awt.Graphics;
 import static Controllers.graphController.NODES_COLOR;
 import static Controllers.graphController.getEdges;
@@ -141,6 +142,17 @@ public class drawController {
             temp.draw(g);
         }
     }
-
+    
+    /**
+     * Dibujar el camino más corto entre el fantasma y Pacman.
+     * @param g 
+     */
+    public static void drawPath(Graphics g) {
+        if (getPath() == null) return;
+        
+        getPath().forEach((temp) -> {
+                drawController.drawNode(g, temp.X(), temp.Y());
+        });
+    }
 
 }
