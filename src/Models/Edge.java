@@ -1,6 +1,7 @@
 package Models;
 
 import static Controllers.graphController.TAM_NODOS;
+import static Controllers.graphController.searchNode;
 import static java.lang.Math.pow;
 
 /**
@@ -99,13 +100,11 @@ public class Edge {
     }
 
     public Node getSource() {
-        // return searchNode(init);
-        return null;
+        return searchNode(init);
     }
 
     public Node getDestination() {
-        // return searchNode(end);
-        return null;
+        return searchNode(end);
     }
 
     @Override

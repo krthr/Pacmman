@@ -1,5 +1,6 @@
 package Controllers;
 
+import static Controllers.gameController.GHOSTS;
 import static Controllers.gameController.MAP;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
@@ -9,10 +10,9 @@ import static Controllers.graphController.getEdges;
 import static Controllers.graphController.getNodes;
 import static Controllers.mapController.N_X;
 import static Controllers.mapController.N_Y;
+import Models.Ghost;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.image.ImageObserver;
-import java.io.File;
 import java.util.Random;
 import javax.swing.ImageIcon;
 
@@ -93,10 +93,8 @@ public class drawController {
             return;
         }
 
-        // System.out.println("TAM: " + getEdges().size());
         getEdges().forEach((temp) -> {
-            System.out.println(temp.toString());
-            drawEdge(g, temp.getX2(), temp.getX2(), temp.getY1(), temp.getY2());
+            drawEdge(g, temp.getX1() + PRO_X/2, temp.getX2() + PRO_X /2, temp.getY1() + PRO_Y / 2, temp.getY2() + PRO_Y / 2);
         });
     }
 
@@ -111,7 +109,7 @@ public class drawController {
      */
     public static void drawEdge(Graphics g, int x1, int x2, int y1, int y2) {
         g.setColor(NODES_COLOR);
-        g.drawLine(x1 - PRO_X / 2, y1 - PRO_Y / 2, x2 - PRO_X / 2, y2 - PRO_Y / 2);
+        g.drawLine(x1, y1, x2, y2);
     }
 
     /**
@@ -132,5 +130,17 @@ public class drawController {
             }
         }
     }
+    
+    /**
+     * Dibujar todos los fantasma en el tablero.
+     *
+     * @param g
+     */
+    public static void drawGhosts(Graphics g) {
+        for (Ghost temp : GHOSTS) {
+            temp.draw(g);
+        }
+    }
+
 
 }

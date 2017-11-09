@@ -1,5 +1,7 @@
 package Controllers;
 
+import static Controllers.drawController.drawEdges;
+import static Controllers.drawController.drawGhosts;
 import static Controllers.drawController.drawMap;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
@@ -232,6 +234,8 @@ public class gameController extends java.awt.Canvas {
 
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
+            
+            
 
             while (true) {
 
@@ -240,7 +244,9 @@ public class gameController extends java.awt.Canvas {
                     g.fillRect(0, 0, getWidth(), getHeight());
 
                     drawMap(g);
-
+                    // drawEdges(g);
+                    
+                    GHOSTS[0].getSortestPathToPacman(g);
                     currentTime = System.currentTimeMillis() - startTime;
 
                     switch (PACMAN.currentDirection) {
@@ -274,18 +280,7 @@ public class gameController extends java.awt.Canvas {
             }
         });
     }
-
-    /**
-     * Dibujar todos los fantasma en el tablero.
-     *
-     * @param g
-     */
-    private void drawGhosts(Graphics g) {
-        for (Ghost temp : GHOSTS) {
-            temp.draw(g);
-        }
-    }
-
+    
     /**
      * Cargar hilo de los fantasmas
      */
@@ -301,27 +296,6 @@ public class gameController extends java.awt.Canvas {
                 while (true) {
                     try {
                         currentTime = System.currentTimeMillis() - startTime;
-
-                        int temp = rn.nextInt(4 - 1 + 1) + 1;
-                        switch (temp) {
-                            case 1: {
-                                GHOSTS[0].moveUp(currentTime + 1000);
-                                break;
-                            }
-                            case 2: {
-                                GHOSTS[0].moveDown(currentTime);
-                                break;
-                            }
-                            case 3: {
-                                GHOSTS[0].moveRigth(currentTime);
-                                break;
-                            }
-                            case 4: {
-                                GHOSTS[0].moveLeft(currentTime + 1000000);
-                                break;
-                            }
-                        }
-
                         Thread.sleep(40);
                     } catch (InterruptedException e) {
 

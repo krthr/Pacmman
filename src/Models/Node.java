@@ -1,5 +1,7 @@
 package Models;
 
+import static Controllers.gameController.PRO_X;
+import static Controllers.gameController.PRO_Y;
 import static Controllers.graphController.NODES_COLOR;
 import java.awt.Color;
 import java.awt.Image;
@@ -70,6 +72,14 @@ public class Node {
      */
     public int X() {
         return this.posx;
+    }
+    
+    public int I() {
+        return this.posy / PRO_Y;
+    }
+    
+    public int J() {
+        return this.posx / PRO_X;
     }
 
     @Override

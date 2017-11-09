@@ -1,6 +1,14 @@
 package Models;
 
 import Controllers.animationController;
+import Controllers.drawController;
+import static Controllers.gameController.PRO_X;
+import static Controllers.gameController.PRO_Y;
+import Controllers.graphController;
+import static Controllers.graphController.dijktra;
+import static Controllers.graphController.searchNode;
+import java.awt.Graphics;
+import java.util.LinkedList;
 import javax.swing.ImageIcon;
 
 /**
@@ -40,6 +48,20 @@ public class Ghost extends Character {
                         100);
             }
         }
+    }
+    
+    public void getSortestPathToPacman(Graphics g) {
+        Node position = searchNode(440,280);
+        System.out.println("X: " + x + " - Y: " + y);
+        dijktra().execute(position);
+        
+        LinkedList<Node> way = dijktra().getPath(searchNode(40,480));
+        if (way == null) return;
+        way.forEach((temp) -> {
+            drawController.drawNode(g, temp.X(), temp.Y());
+        });
+        
+        
     }
     
 }
