@@ -135,7 +135,7 @@ public class drawController {
     /**
      * Dibujar todos los fantasma en el tablero.
      *
-     * @param g
+     * @param g Graficos donde se dibujará
      */
     public static void drawGhosts(Graphics g) {
         for (Ghost temp : GHOSTS) {
@@ -145,7 +145,7 @@ public class drawController {
     
     /**
      * Dibujar el camino más corto entre el fantasma y Pacman.
-     * @param g 
+     * @param g Graficos donde se dibujará
      */
     public static void drawPath(Graphics g) {
         if (getPath() == null) return;

@@ -58,7 +58,7 @@ public class Character {
     /**
      * Obtener posición en x
      *
-     * @return
+     * @return La posición en X
      */
     public int X() {
         return x;
@@ -67,7 +67,7 @@ public class Character {
     /**
      * Obtener posición en y
      *
-     * @return
+     * @return La posición en Y
      */
     public int Y() {
         return y;

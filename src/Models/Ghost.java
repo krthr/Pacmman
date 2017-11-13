@@ -1,7 +1,6 @@
 package Models;
 
 import Controllers.animationController;
-import Controllers.drawController;
 import static Controllers.gameController.PACMAN;
 import static Controllers.graphController.dijktra;
 import java.awt.Graphics;
@@ -22,7 +21,7 @@ public class Ghost extends Character {
      * @param y Posicion en y
      * @param vx Velocidad en x
      * @param vy Velocidad en y
-     * @param path
+     * @param path (?)
      */
     public Ghost(int x, int y, int vx, int vy, String path) {
         super(x, y, vx, vy, path);
@@ -47,19 +46,17 @@ public class Ghost extends Character {
         }
     }
 
-    public LinkedList getSortestPathToPacman(Graphics g) {
+    /**
+     * Generar el camino más corto entre el fantasma y Pacman.
+     * @return Lista de nodos que componen el camino.
+     */
+    public LinkedList getSortestPathToPacman() {
         Node position = actualNode();
         // System.out.println("X: " + x + " - Y: " + y);
         dijktra().execute(position);
 
         LinkedList<Node> way = dijktra().getPath(PACMAN.actualNode());
 
-//        if (way != null) {
-//            // System.out.println(way);
-//            way.forEach((temp) -> {
-//                drawController.drawNode(g, temp.X(), temp.Y());
-//            });
-//        }
         return way;
     }
 

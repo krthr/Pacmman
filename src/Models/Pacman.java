@@ -23,7 +23,7 @@ public class Pacman extends Character {
      * @param y Posicion en y
      * @param vx Velocidad en x
      * @param vy Velocidad en y
-     * @param path
+     * @param path (?)
      */
     public Pacman(int x, int y, int vx, int vy, String path) {
         super(x, y, vx, vy, path);
@@ -33,8 +33,8 @@ public class Pacman extends Character {
     /**
      * Cargar sprites.
      *
-     * @param names
-     * @throws Exception
+     * @param names Vector con los nombres de las imágenes.
+     * @throws Exception Si no existe (o se encuentra) el archivo
      */
     public void loadPics(String[] names) throws Exception {
         System.out.println("INFO (Pacman): Cargando sprites...");

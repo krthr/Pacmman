@@ -31,7 +31,7 @@ public class soundController {
     /**
      * Seleccionar tema musical.
      *
-     * @param n
+     * @param n ID del tema musical
      */
     public void selTheme(int n) {
         switch (n) {

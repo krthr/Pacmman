@@ -1,9 +1,7 @@
 package Controllers;
 
-import static Controllers.drawController.drawEdges;
 import static Controllers.drawController.drawGhosts;
 import static Controllers.drawController.drawMap;
-import static Controllers.drawController.drawNodes;
 import static Controllers.drawController.drawPath;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
@@ -20,7 +18,6 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
@@ -38,23 +35,26 @@ public class gameController extends java.awt.Canvas {
     private final javax.swing.JFrame father;
 
     /**
-     * Hilos del juego.
+     * Hilo de los fantasma.
      */
     private Thread GHOSTS_THREAD;
+    /**
+     * Hilo principal.
+     */
     private Thread MAIN;
-
     /**
      * Caracteres del juego.
      */
     public static Pacman PACMAN;
-
     /**
      * Lista de fantasmas.
      */
     public static Ghost[] GHOSTS;
 
+    /**
+     * Velocidad para los Hilos.
+     */
     private final int FPS = 10;
-    private BufferStrategy bs;
     /**
      * Mapa actual
      */
@@ -76,15 +76,18 @@ public class gameController extends java.awt.Canvas {
      */
     public static int PIXELS;
     private static boolean PAUSE;
+    /**
+     * Camino con los nodos del camino más corto entre el fantasma y pacman.
+     */
     private static LinkedList<Node> SORTESTPATH;
 
     /**
      *
-     * @param main
+     * @param main JFrame donde el Canvas será dibujado.
      * @param w Ancho del canvas
      * @param h Alto del canvas
      * @param dev ¿Iniciar en modo desarrollo?
-     * @throws Exception
+     * @throws Exception Error
      */
     public gameController(javax.swing.JFrame main, int w, int h, boolean dev) throws Exception {
         this.setSize(w, h);
@@ -95,10 +98,8 @@ public class gameController extends java.awt.Canvas {
 
         EventQueue.invokeLater(() -> {
             try {
-
                 loadData(w, h);
                 loadGraph();
-
                 loadCharacters(w, h);
                 loadMainThread();
                 loadGhostsThread();
@@ -117,7 +118,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Cargar datos.
      *
-     * @throws Exception
+     * @throws Exception 
      */
     private void loadData(int w, int h) throws Exception {
         System.out.println("INFO (Game): Cargando datos...");
@@ -179,12 +180,7 @@ public class gameController extends java.awt.Canvas {
                         break;
                     }
                     case KeyEvent.VK_P: {
-                        if (PAUSE) {
-                            PAUSE = false;
-                        } else {
-                            PAUSE = true;
-                        }
-
+                        PAUSE = !PAUSE;
                         break;
                     }
                 }
@@ -219,7 +215,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Iniciar hilos.
      *
-     * @param game
+     * @param game Juego que será iniciado.
      */
     public static void startGame(Controllers.gameController game) {
         game.MAIN.start();
@@ -238,7 +234,7 @@ public class gameController extends java.awt.Canvas {
 
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
-            
+
             while (true) {
 
                 try {
@@ -248,9 +244,8 @@ public class gameController extends java.awt.Canvas {
                     drawMap(g);
                     // drawNodes(g);
                     // drawEdges(g);
-                    
                     drawPath(g);
-                    
+
                     currentTime = System.currentTimeMillis() - startTime;
 
                     switch (PACMAN.currentDirection) {
@@ -284,36 +279,32 @@ public class gameController extends java.awt.Canvas {
             }
         });
     }
-    
+
     /**
      * Cargar hilo de los fantasmas
      */
     private void loadGhostsThread() {
-        GHOSTS_THREAD = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                long startTime = System.currentTimeMillis();
-                long currentTime = 0;
-
-                Random rn = new Random();
-
-                while (true) {
-                    try {
-                        currentTime = System.currentTimeMillis() - startTime;
-                        SORTESTPATH = GHOSTS[0].getSortestPathToPacman(null);
-                        Thread.sleep(FPS);
-                    } catch (InterruptedException e) {
-
-                    }
+        GHOSTS_THREAD = new Thread(() -> {
+            long startTime = System.currentTimeMillis();
+            long currentTime = 0;
+            
+            Random rn = new Random();
+            
+            while (true) {
+                try {
+                    currentTime = System.currentTimeMillis() - startTime;
+                    SORTESTPATH = GHOSTS[0].getSortestPathToPacman();
+                    Thread.sleep(FPS);
+                } catch (InterruptedException e) {
+                    
                 }
-
             }
-
         });
     }
 
     /**
      * Ver si el juego está pausado.
+     *
      * @return True si está pausado. False si no está pausado.
      */
     public static boolean isPaused() {
