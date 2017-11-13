@@ -30,7 +30,7 @@ public class boardController extends javax.swing.JFrame {
      */
     public boardController() {
         initComponents();
-        this.setSize(1000, 600);
+        this.setSize(1000, 650);
         this.setBackground(Color.BLACK);
         this.arrowOp2.setVisible(false);
         this.setIconImage(new ImageIcon(getClass().getResource("/Assets/Ghost0.png")).getImage());

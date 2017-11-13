@@ -4,7 +4,6 @@ import static Controllers.gameController.MAP;
 import static Controllers.gameController.MAX_POINTS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
-import static Controllers.mapController.LEVEL1;
 import static Controllers.mapController.N_X;
 import static Controllers.mapController.N_Y;
 import Models.Edge;
@@ -47,6 +46,8 @@ public class graphController {
 
     private static int N_ID = 0;
 
+    private static int[] COINS_NODES;
+
     public static int N() {
         return N_ID;
     }
@@ -73,6 +74,7 @@ public class graphController {
      * Cargar todos los datos relacionados al grafo.
      */
     public static void loadGraph() {
+        generateCoinsNodes();
         loadNodes();
         loadEdges();
         generateMatriz();
@@ -87,16 +89,15 @@ public class graphController {
      * Cargar nodos del grafo.
      */
     private static void loadNodes() {
-        Random rn = new Random();
+
+        if (NODES == null) {
+            NODES = new ArrayList<>();
+        }
 
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
                 if (MAP[i][j] == 0) {
-                    boolean coin = rn.nextInt((30) - 1 + 1) + 1 == 1;
-                    if (coin) {
-                        MAX_POINTS += 10;
-                    }
-                    addNode(j * PRO_X, i * PRO_Y, coin);
+                    addNode(j * PRO_X, i * PRO_Y);
                 }
             }
         }
@@ -106,6 +107,10 @@ public class graphController {
      * Cargar aristas del grafo.
      */
     private static void loadEdges() {
+        if (EDGES == null) {
+            EDGES = new ArrayList<>();
+        }
+
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
                 if (MAP[i][j] == 0) {
@@ -163,15 +168,28 @@ public class graphController {
      * @param x Posición en X
      * @param y Posición en Y
      */
-    private static void addNode(int x, int y, boolean isCoin) {
-        Node temp = new Node(N_ID, x, y, isCoin, null);
+    private static void addNode(int x, int y) {
 
-        if (NODES == null) {
-            NODES = new ArrayList<>();
+        Node temp = new Node(N_ID, x, y, false, null);;
+
+        for (int i = 0; i < 10; i++) {
+            if (COINS_NODES[i] == N_ID) {
+                temp = new Node(N_ID, x, y, true, null);
+                break;
+            }
         }
 
         NODES.add(temp);
         N_ID++;
+    }
+
+    private static void generateCoinsNodes() {
+        COINS_NODES = new int[10];
+        Random rn = new Random();
+        for (int i = 0; i < 10; i++) {
+            COINS_NODES[i] = rn.nextInt(185 - 1 + 1) + 1;
+            MAX_POINTS += 10;
+        }
     }
 
     /**
@@ -183,9 +201,6 @@ public class graphController {
      * @param y2 Y del nodo final
      */
     private static void addEdge(int x1, int x2, int y1, int y2) {
-        if (EDGES == null) {
-            EDGES = new ArrayList<>();
-        }
 
         Node init = searchNode(x1, y1), end = searchNode(x2, y2);
 

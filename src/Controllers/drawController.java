@@ -3,6 +3,7 @@ package Controllers;
 import static Controllers.boardController.GAME_HEIGHT;
 import static Controllers.boardController.GAME_WIDTH;
 import static Controllers.gameController.GHOSTS;
+import static Controllers.gameController.MAP;
 import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
@@ -121,24 +122,33 @@ public class drawController {
         g.drawLine(x1, y1, x2, y2);
     }
 
+    public static void drawBoard(Graphics g, int point) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 600, 1000, 30);
+        g.setColor(Color.WHITE);
+        g.drawString("P U N T O S : " + point, 10, 615);
+        
+        drawMap(g);
+        
+    }
+
     /**
      * Dibujar mapa.
      *
      * @param g Gráfico donde se dibujará.
      */
-    public static void drawMap(Graphics g) {
-        Random rn = new Random();
+    private static void drawMap(Graphics g) {
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
-                Node temp = graphController.searchNode(j * PRO_X, i * PRO_Y);
-                if (temp != null) {
+                if (MAP[i][j] == 1) {
+                    g.drawImage(WALL_IMG, j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
+                } else {
+                    Node temp = graphController.searchNode(j * PRO_X, i * PRO_Y);
                     g.drawImage(WAY_IMG[0], j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
                     if (temp.isCoin()) {
                         g.setColor(Color.WHITE);
-                        g.fillOval(temp.X() + PRO_X/4, temp.Y() + PRO_Y/4, (int) (PIXELS * 0.6), (int) (PIXELS * 0.6));
+                        g.fillOval(temp.X() + PRO_X / 4, temp.Y() + PRO_Y / 4, (int) (PIXELS * 0.6), (int) (PIXELS * 0.6));
                     }
-                } else {
-                    g.drawImage(WALL_IMG, j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
                 }
             }
         }
@@ -172,12 +182,13 @@ public class drawController {
 
     /**
      * Dibujar la pantalla de juego terminado.
+     *
      * @param g Graficos donde se dibujará
      * @param point Puntos obtenidos
      */
     public static void drawGameOver(Graphics2D g, int point) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT + 30);
         g.setColor(Color.YELLOW);
         g.setFont(new Font("Consolas", Font.PLAIN, 30));
         g.drawString("Puntos: " + point, GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 50);
@@ -188,15 +199,16 @@ public class drawController {
         g.setFont(new Font("Consolas", Font.PLAIN, 15));
         g.drawString("Presiona ENTER para terminar el juego.", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 100);
     }
-    
+
     /**
      * Dibujar la pantalla de juego ganado.
+     *
      * @param g Donde se dibujará
      * @param point Puntos obtenidos.
      */
     public static void drawWin(Graphics2D g, int point) {
         g.setColor(Color.BLACK);
-        g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT + 30);
         g.setColor(Color.YELLOW);
         g.setFont(new Font("Consolas", Font.PLAIN, 30));
         g.drawString("Puntos: " + point, GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 50);

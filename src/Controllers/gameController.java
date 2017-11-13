@@ -2,7 +2,7 @@ package Controllers;
 
 import static Controllers.drawController.drawGameOver;
 import static Controllers.drawController.drawGhosts;
-import static Controllers.drawController.drawMap;
+import static Controllers.drawController.drawBoard;
 import static Controllers.drawController.drawWin;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
@@ -108,7 +108,7 @@ public class gameController extends java.awt.Canvas {
      * @throws Exception Error
      */
     public gameController(javax.swing.JFrame main, int w, int h, boolean dev) throws Exception {
-        this.setSize(w, h);
+        this.setSize(w, h + 70);
         this.father = main;
         this.requestFocus();
 
@@ -258,7 +258,7 @@ public class gameController extends java.awt.Canvas {
                         drawWin((Graphics2D) g, POINTS);
                         PLAYING = false;
                     } else {
-                        drawMap(g);
+                        drawBoard(g, POINTS);
                         // drawController.drawNodes(g);
                         // drawController.drawEdges(g);
                         // drawController.drawPath(g);
