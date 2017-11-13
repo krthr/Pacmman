@@ -4,6 +4,7 @@ import static Controllers.boardController.GAME_HEIGHT;
 import static Controllers.boardController.GAME_WIDTH;
 import static Controllers.gameController.GHOSTS;
 import static Controllers.gameController.MAP;
+import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
 import static Controllers.gameController.getPath;
@@ -14,6 +15,7 @@ import static Controllers.graphController.getNodes;
 import static Controllers.mapController.N_X;
 import static Controllers.mapController.N_Y;
 import Models.Ghost;
+import Models.Node;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -36,9 +38,9 @@ public class drawController {
             .getResource("/Assets/wall.jpg"))).getImage();
     public final static Image[] WAY_IMG = {
         (new ImageIcon(drawController.class.getClass()
-            .getResource("/Assets/way.jpg"))).getImage(),
+        .getResource("/Assets/way.jpg"))).getImage(),
         (new ImageIcon(drawController.class.getClass()
-            .getResource("/Assets/way2.jpg"))).getImage()
+        .getResource("/Assets/way2.jpg"))).getImage()
     };
     /**
      * Color de las paredes.
@@ -100,7 +102,7 @@ public class drawController {
         }
 
         getEdges().forEach((temp) -> {
-            drawEdge(g, temp.getX1() + PRO_X/2, temp.getX2() + PRO_X /2, temp.getY1() + PRO_Y / 2, temp.getY2() + PRO_Y / 2);
+            drawEdge(g, temp.getX1() + PRO_X / 2, temp.getX2() + PRO_X / 2, temp.getY1() + PRO_Y / 2, temp.getY2() + PRO_Y / 2);
         });
     }
 
@@ -127,16 +129,20 @@ public class drawController {
         Random rn = new Random();
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
-                if (MAP[i][j] == 1) {
-                    g.drawImage(WALL_IMG, j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
-                } else {
-                    int a = rn.nextInt(1 - 0 + 1) + 0;
+                Node temp = graphController.searchNode(j * PRO_X, i * PRO_Y);
+                if (temp != null) {
                     g.drawImage(WAY_IMG[0], j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
+                    if (temp.isCoin()) {
+                        g.setColor(Color.WHITE);
+                        g.fillOval(temp.X() + PRO_X/4, temp.Y() + PRO_Y/4, (int) (PIXELS * 0.6), (int) (PIXELS * 0.6));
+                    }
+                } else {
+                    g.drawImage(WALL_IMG, j * PRO_X, i * PRO_Y, PRO_X, PRO_Y, null);
                 }
             }
         }
     }
-    
+
     /**
      * Dibujar todos los fantasma en el tablero.
      *
@@ -147,32 +153,38 @@ public class drawController {
             temp.draw(g);
         }
     }
-    
+
     /**
      * Dibujar el camino más corto entre el fantasma y Pacman.
+     *
      * @param g Graficos donde se dibujará
      */
     public static void drawPath(Graphics g) {
-        if (getPath() == null) return;
-        
+        if (getPath() == null) {
+            return;
+        }
+
         getPath().forEach((temp) -> {
-                drawController.drawNode(g, temp.X(), temp.Y());
+            drawController.drawNode(g, temp.X(), temp.Y());
         });
     }
-    
+
     /**
-     * 
-     * @param g 
+     * Dibujar la pantalla de juego terminado.
+     * @param g
      */
-    public static void drawGameOver(Graphics2D g) {
+    public static void drawGameOver(Graphics2D g, int point) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        
+
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("Consolas", Font.PLAIN, 30));
+        g.drawString("Puntos: " + point, GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 50);
         g.setFont(new Font("Consolas", Font.PLAIN, 38));
         g.setColor(Color.WHITE);
         g.drawString("G A M E   O V E R", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2);
         g.setFont(new Font("Consolas", Font.PLAIN, 15));
         g.drawString("Presiona ENTER para terminar el juego.", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 100);
     }
-    
+
 }

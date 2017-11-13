@@ -17,7 +17,7 @@ public class Node {
     private final int posx;
     private final int posy;
     private final Color color;
-    private final boolean isCoin;
+    private boolean isCoin;
     private final Image image;
 
     /**
@@ -80,6 +80,14 @@ public class Node {
     
     public int J() {
         return this.posx / PRO_X;
+    }
+
+    public boolean isCoin() {
+        return isCoin;
+    }
+    
+    public void setCoint() {
+        this.isCoin = !this.isCoin;
     }
 
     @Override

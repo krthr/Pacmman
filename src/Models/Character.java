@@ -168,7 +168,7 @@ public class Character {
      * @param g Gráfico donde se dibujará.
      */
     public void draw(Graphics g) {
-        g.drawImage(animations[currentAnimation].getImage(), x, y, null);
+        g.drawImage(animations[currentAnimation].getImage(), x, y, PIXELS, PIXELS,null);
     }
 
     /**

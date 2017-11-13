@@ -84,8 +84,14 @@ public class gameController extends java.awt.Canvas {
      * Camino con los nodos del camino más corto entre el fantasma y pacman.
      */
     private static LinkedList<Node> SORTESTPATH;
-
+    /**
+     * ¿El juego acabó?
+     */
     public static boolean PLAYING = true;
+    /**
+     * Puntos que tiene el jugados.
+     */
+    private static int POINTS = 0;
 
     /**
      *
@@ -133,7 +139,7 @@ public class gameController extends java.awt.Canvas {
         MAP = LEVEL1;
         PRO_X = w / 25;
         PRO_Y = h / 15;
-        PIXELS = 22;
+        PIXELS = 27;
         PAUSE = false;
     }
 
@@ -241,7 +247,7 @@ public class gameController extends java.awt.Canvas {
             while (PLAYING) {
                 try {
                     if (PACMAN.isDead()) {
-                        drawGameOver((Graphics2D) g);
+                        drawGameOver((Graphics2D) g, POINTS);
                         PLAYING = false;
                     } else {
                         drawMap(g);
@@ -268,6 +274,11 @@ public class gameController extends java.awt.Canvas {
                                 PACMAN.moveUp(currentTime);
                                 break;
                             }
+                        }
+                        
+                        if (PACMAN.actualNode() != null && PACMAN.actualNode().isCoin()) {
+                            PACMAN.actualNode().setCoint();
+                            POINTS += 10;
                         }
 
                         PACMAN.draw(g);
@@ -323,6 +334,10 @@ public class gameController extends java.awt.Canvas {
         MOVE_GOST = new Thread(() -> {
             long startTime = System.currentTimeMillis();
             while (PLAYING) {
+                
+                if (PACMAN.actualNode() != GHOSTS[0].actualNode()) {
+                    System.out.println("Moviendo...");
+                }
                 
             }
         });

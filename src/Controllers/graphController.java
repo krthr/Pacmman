@@ -9,12 +9,8 @@ import static Controllers.mapController.N_Y;
 import Models.Edge;
 import Models.Node;
 import java.awt.Color;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Constrolador del grafo.
@@ -35,11 +31,6 @@ public class graphController {
      * Lista de las aristas del grafo.
      */
     private static ArrayList<Edge> EDGES;
-    /**
-     * Archivos del grafo.
-     */
-    private static final File EDGES_FILE = new File(graphController.class.getClass().getResource("/Models/edges.txt").getFile());
-    private static final File NODES_FILE = new File(graphController.class.getClass().getResource("/Models/nodes.txt").getFile());
     /**
      * Tamaño de los nodos.
      */
@@ -82,7 +73,6 @@ public class graphController {
         loadNodes();
         loadEdges();
         generateMatriz();
-        saveDataOnFile();
         DIJKSTRA = new dijkstraController();
     }
 
@@ -94,10 +84,14 @@ public class graphController {
      * Cargar nodos del grafo.
      */
     private static void loadNodes() {
+        Random rn = new Random();
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
+                int temp = rn.nextInt((15 - 1) + 1) + 1;
+                
                 if (LEVEL1[i][j] == 0) {
-                    addNode(j * PRO_X, i * PRO_Y);
+                    if (temp == 3) addNode(j * PRO_X, i * PRO_Y, true);
+                    else addNode(j * PRO_X, i * PRO_Y, false);
                 }
             }
         }
@@ -164,8 +158,8 @@ public class graphController {
      * @param x Posición en X
      * @param y Posición en Y
      */
-    private static void addNode(int x, int y) {
-        Node temp = new Node(N_ID, x, y, false, null);
+    private static void addNode(int x, int y, boolean isCoin) {
+        Node temp = new Node(N_ID, x, y, isCoin, null);
 
         if (NODES == null) {
             NODES = new ArrayList<>();
@@ -231,31 +225,6 @@ public class graphController {
         }
 
         return null;
-    }
-
-    /**
-     * Guardar datos del grafo en archivos.
-     */
-    private static void saveDataOnFile() {
-        if (NODES_FILE == null || EDGES_FILE == null || NODES == null || EDGES == null) {
-            return;
-        }
-
-        try (BufferedWriter nodes = new BufferedWriter(new FileWriter(NODES_FILE))) {
-            for (Node temp : NODES) {
-                nodes.write(temp.toString() + "\n");
-            }
-        } catch (IOException ex) {
-            System.err.println("ERROR (Graph): Error al cargar el archivo de nodos. \n" + Arrays.toString(ex.getStackTrace()));
-        }
-
-        try (BufferedWriter edges = new BufferedWriter(new FileWriter(EDGES_FILE))) {
-            for (Edge temp : EDGES) {
-                edges.write(temp.toString() + "\n");
-            }
-        } catch (IOException ex) {
-            System.err.println("ERROR (Graph): Error al cargar el archivo de aristas. \n" + Arrays.toString(ex.getStackTrace()));
-        }
     }
 
 }
