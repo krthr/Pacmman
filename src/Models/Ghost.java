@@ -2,6 +2,7 @@ package Models;
 
 import Controllers.animationController;
 import static Controllers.gameController.PACMAN;
+import static Controllers.gameController.getPath;
 import static Controllers.graphController.dijktra;
 import java.awt.Graphics;
 import java.util.LinkedList;
@@ -52,12 +53,23 @@ public class Ghost extends Character {
      */
     public LinkedList getSortestPathToPacman() {
         Node position = actualNode();
-        // System.out.println("X: " + x + " - Y: " + y);
         dijktra().execute(position);
 
         LinkedList<Node> way = dijktra().getPath(PACMAN.actualNode());
 
         return way;
+    }
+    
+    /**
+     * Mover fantasma hasta la posición del fantasma.
+     */
+    public void moveGhost() {
+        if (getPath() == null) return;
+        
+        while (this.actualNode() != PACMAN.actualNode()) {
+            Node pos = this.actualNode();
+            
+        }
     }
 
 }

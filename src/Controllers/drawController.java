@@ -135,7 +135,7 @@ public class drawController {
     /**
      * Dibujar todos los fantasma en el tablero.
      *
-     * @param g Graficos donde se dibujará
+     * @param g
      */
     public static void drawGhosts(Graphics g) {
         for (Ghost temp : GHOSTS) {

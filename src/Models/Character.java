@@ -166,11 +166,23 @@ public class Character {
         g.drawImage(animations[currentAnimation].getImage(), x, y, null);
     }
 
+    /**
+     * Obtener el nodo actual en el que se encuentra.
+     *
+     * @return El nodo de la posición actual.
+     */
     public Node actualNode() {
         Node temp = getNode(x + PIXELS / 2, y + PIXELS / 2);
         return temp;
     }
 
+    /**
+     * Obtener nodo según coordenadas.
+     *
+     * @param x Coordenada en X
+     * @param y Coordenada en Y
+     * @return El nodo donde las coordenadas se encuentran, si existe.
+     */
     private Node getNode(int x, int y) {
         Node se = null;
         for (Node temp : getNodes()) {
@@ -179,7 +191,7 @@ public class Character {
                 break;
             }
         }
-        
+
         return se;
     }
 

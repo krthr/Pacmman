@@ -33,7 +33,6 @@ public class gameController extends java.awt.Canvas {
      * Frame padre del juego.
      */
     private final javax.swing.JFrame father;
-
     /**
      * Hilo de los fantasma.
      */
@@ -42,6 +41,10 @@ public class gameController extends java.awt.Canvas {
      * Hilo principal.
      */
     private Thread MAIN;
+    /**
+     * Hilo para mover el fantasma.
+     */
+    private Thread MOVE_GOST;
     /**
      * Caracteres del juego.
      */
@@ -103,9 +106,11 @@ public class gameController extends java.awt.Canvas {
                 loadCharacters(w, h);
                 loadMainThread();
                 loadGhostsThread();
+                loadMoveGhostThread();
 
                 MAIN.start();
                 GHOSTS_THREAD.start();
+                MOVE_GOST.start();
             } catch (Exception ex) {
                 System.err.println("ERROR (Game): Error al cargar funciones principales. \n" + Arrays.toString(ex.getStackTrace()));
             }
@@ -213,16 +218,6 @@ public class gameController extends java.awt.Canvas {
     }
 
     /**
-     * Iniciar hilos.
-     *
-     * @param game Juego que será iniciado.
-     */
-    public static void startGame(Controllers.gameController game) {
-        game.MAIN.start();
-        game.GHOSTS_THREAD.start();
-    }
-
-    /**
      * Cargar hilo principal.
      */
     private void loadMainThread() {
@@ -284,15 +279,9 @@ public class gameController extends java.awt.Canvas {
      * Cargar hilo de los fantasmas
      */
     private void loadGhostsThread() {
-        GHOSTS_THREAD = new Thread(() -> {
-            long startTime = System.currentTimeMillis();
-            long currentTime = 0;
-            
-            Random rn = new Random();
-            
+        GHOSTS_THREAD = new Thread(() -> {                        
             while (true) {
                 try {
-                    currentTime = System.currentTimeMillis() - startTime;
                     SORTESTPATH = GHOSTS[0].getSortestPathToPacman();
                     Thread.sleep(FPS);
                 } catch (InterruptedException e) {
@@ -303,6 +292,17 @@ public class gameController extends java.awt.Canvas {
     }
 
     /**
+     * Cargar hilo encargado del movimiento del fantasma.
+     */
+    private void loadMoveGhostThread() {
+        MOVE_GOST = new Thread(() -> {
+            while (true) {
+                GHOSTS[0].moveGhost();
+            }
+        });
+    }
+    
+    /**
      * Ver si el juego está pausado.
      *
      * @return True si está pausado. False si no está pausado.
@@ -311,6 +311,10 @@ public class gameController extends java.awt.Canvas {
         return PAUSE;
     }
 
+    /**
+     * Obtener el camino del fantasma al Pacman
+     * @return Un array de nodos
+     */
     public static LinkedList<Node> getPath() {
         return SORTESTPATH;
     }
