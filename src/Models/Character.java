@@ -83,9 +83,9 @@ public class Character {
             return;
         }
         int x = this.x + PIXELS + vx;
-        if (MAP[toI(y + (PIXELS / 2))][toI(x)] == 0
-                && MAP[toI(y)][toI(x)] == 0
-                && MAP[toI(y + PIXELS)][toI(x)] == 0) {
+        if (MAP[xToI(y + (PIXELS / 2))][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y + PIXELS)][xToI(x)] == 0) {
             this.x += vx;
         }
 
@@ -103,9 +103,9 @@ public class Character {
             return;
         }
         int x = this.x - vx;
-        if (MAP[toI(y + (PIXELS / 2))][toI(x)] == 0
-                && MAP[toI(y)][toI(x)] == 0
-                && MAP[toI(y + PIXELS)][toI(x)] == 0) {
+        if (MAP[xToI(y + (PIXELS / 2))][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y + PIXELS)][xToI(x)] == 0) {
             this.x -= vx;
         }
 
@@ -124,9 +124,9 @@ public class Character {
         }
         
         int y = this.y - vy;
-        if (MAP[toI(y)][toI(x + (PIXELS / 2))] == 0
-                && MAP[toI(y)][toI(x)] == 0
-                && MAP[toI(y)][toI(x + PIXELS - 2)] == 0) {
+        if (MAP[xToI(y)][xToI(x + (PIXELS / 2))] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x + PIXELS - 2)] == 0) {
             this.y -= vy;
         }
 
@@ -144,9 +144,9 @@ public class Character {
             return;
         }
         int y = this.y + PIXELS + vy;
-        if (MAP[toI(y)][toI(x + (PIXELS / 2))] == 0
-                && MAP[toI(y)][toI(x)] == 0
-                && MAP[toI(y)][toI(x + PIXELS - 3)] == 0) {
+        if (MAP[xToI(y)][xToI(x + (PIXELS / 2))] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x + PIXELS - 3)] == 0) {
             this.y += vy;
         }
 
@@ -154,8 +154,12 @@ public class Character {
         animations[DOWN].update(time);
     }
 
-    private int toI(int n) {
+    private int xToI(int n) {
         return n / PRO_X;
+    }
+    
+    private int yToI(int n) {
+        return n / PRO_Y;
     }
 
     /**
@@ -195,5 +199,23 @@ public class Character {
 
         return se;
     }
+
+    /**
+     * Asignar valor de la posición en X
+     * @param x Valor de la posición en X
+     */
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * Asignar valor de la posición en Y
+     * @param y Valor de la posición en Y
+     */
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    
 
 }

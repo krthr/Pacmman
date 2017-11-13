@@ -1,6 +1,7 @@
 package Models;
 
 import Controllers.animationController;
+import static Controllers.gameController.GHOSTS;
 import static Controllers.gameController.LIFES;
 import javax.swing.ImageIcon;
 
@@ -14,7 +15,7 @@ public class Pacman extends Character {
     /**
      * Cantidad de vidas.
      */
-    private final int lifes;
+    public int lifes;
 
     /**
      * Pacman.
@@ -58,6 +59,20 @@ public class Pacman extends Character {
      */
     public boolean isDead() {
         return this.lifes <= 0;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean touchedByGhost() {
+        for (Ghost temp : GHOSTS) {
+            if (temp.actualNode() == this.actualNode()) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
 }

@@ -1,5 +1,7 @@
 package Controllers;
 
+import static Controllers.boardController.GAME_HEIGHT;
+import static Controllers.boardController.GAME_WIDTH;
 import static Controllers.gameController.GHOSTS;
 import static Controllers.gameController.MAP;
 import static Controllers.gameController.PRO_X;
@@ -13,7 +15,10 @@ import static Controllers.mapController.N_X;
 import static Controllers.mapController.N_Y;
 import Models.Ghost;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.text.AttributedCharacterIterator;
 import java.util.Random;
 import javax.swing.ImageIcon;
 
@@ -154,5 +159,20 @@ public class drawController {
                 drawController.drawNode(g, temp.X(), temp.Y());
         });
     }
-
+    
+    /**
+     * 
+     * @param g 
+     */
+    public static void drawGameOver(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        
+        g.setFont(new Font("Consolas", Font.PLAIN, 38));
+        g.setColor(Color.WHITE);
+        g.drawString("G A M E   O V E R", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2);
+        g.setFont(new Font("Consolas", Font.PLAIN, 15));
+        g.drawString("Presiona ENTER para terminar el juego.", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 100);
+    }
+    
 }

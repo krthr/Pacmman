@@ -1,5 +1,6 @@
 package Controllers;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,11 +15,11 @@ public class boardController extends javax.swing.JFrame {
     /**
      * Ancho de la ventana del juego.
      */
-    public static int GAME_WIDTH;
+    public final static int GAME_WIDTH = 1000;
     /**
      * Alto de la ventana del juego.
      */
-    public static int GAME_HEIGHT;
+    public final static int GAME_HEIGHT = 600;
 
     public static boolean INIT;
     public int op = 1;
@@ -29,13 +30,10 @@ public class boardController extends javax.swing.JFrame {
     public boardController() {
         initComponents();
         this.setSize(1000, 600);
+        this.setBackground(Color.BLACK);
         this.arrowOp2.setVisible(false);
         INIT = false;
         addKeyEvent(this);
-        EventQueue.invokeLater(() -> {
-            GAME_WIDTH = 1000;
-            GAME_HEIGHT = 600;
-        });
     }
 
     /**
@@ -112,6 +110,7 @@ public class boardController extends javax.swing.JFrame {
         setType(java.awt.Window.Type.POPUP);
 
         mainPanel.setBackground(new java.awt.Color(0, 0, 0));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 670));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 0), 5));
@@ -143,7 +142,7 @@ public class boardController extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
 
-        txtOp1.setFont(new java.awt.Font("SimSun", 0, 36)); // NOI18N
+        txtOp1.setFont(new java.awt.Font("Consolas", 0, 36)); // NOI18N
         txtOp1.setForeground(new java.awt.Color(255, 255, 255));
         txtOp1.setText("Iniciar");
 
@@ -164,7 +163,7 @@ public class boardController extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 0));
 
-        txtOp5.setFont(new java.awt.Font("SimSun", 0, 36)); // NOI18N
+        txtOp5.setFont(new java.awt.Font("Consolas", 0, 36)); // NOI18N
         txtOp5.setForeground(new java.awt.Color(255, 255, 255));
         txtOp5.setText("Salir");
 
@@ -183,12 +182,12 @@ public class boardController extends javax.swing.JFrame {
                 .addGap(0, 0, 0))
         );
 
-        arrowOp1.setFont(new java.awt.Font("SimSun", 0, 36)); // NOI18N
+        arrowOp1.setFont(new java.awt.Font("Consolas", 0, 36)); // NOI18N
         arrowOp1.setForeground(new java.awt.Color(255, 255, 255));
         arrowOp1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         arrowOp1.setText(">");
 
-        arrowOp2.setFont(new java.awt.Font("SimSun", 0, 36)); // NOI18N
+        arrowOp2.setFont(new java.awt.Font("Consolas", 0, 36)); // NOI18N
         arrowOp2.setForeground(new java.awt.Color(255, 255, 255));
         arrowOp2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         arrowOp2.setText(">");
@@ -242,7 +241,7 @@ public class boardController extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

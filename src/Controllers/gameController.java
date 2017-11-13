@@ -1,5 +1,6 @@
 package Controllers;
 
+import static Controllers.drawController.drawGameOver;
 import static Controllers.drawController.drawGhosts;
 import static Controllers.drawController.drawMap;
 import static Controllers.drawController.drawPath;
@@ -13,14 +14,13 @@ import static Models.Pacman.UP;
 import Models.Ghost;
 import Models.Node;
 import Models.Pacman;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,7 +55,6 @@ public class gameController extends java.awt.Canvas {
      * Lista de fantasmas.
      */
     public static Ghost[] GHOSTS;
-
     /**
      * Velocidad para los Hilos.
      */
@@ -75,7 +74,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Número de vidas en el juego.
      */
-    public static final int LIFES = 3;
+    public static int LIFES = 3;
     /**
      * Tamaño en pixeles de los sprites.
      */
@@ -85,7 +84,9 @@ public class gameController extends java.awt.Canvas {
      * Camino con los nodos del camino más corto entre el fantasma y pacman.
      */
     private static LinkedList<Node> SORTESTPATH;
-    
+
+    public static boolean PLAYING = true;
+
     /**
      *
      * @param main JFrame donde el Canvas será dibujado.
@@ -125,7 +126,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Cargar datos.
      *
-     * @throws Exception 
+     * @throws Exception
      */
     private void loadData(int w, int h) throws Exception {
         System.out.println("INFO (Game): Cargando datos...");
@@ -146,7 +147,7 @@ public class gameController extends java.awt.Canvas {
     private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[1];
 
-        GHOSTS[0] = new Ghost(468, 280, 7, 7, "Ghost0");
+        GHOSTS[0] = new Ghost(440, 200, 7, 7, "Ghost0");
         GHOSTS[0].loadPics(0);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
@@ -190,6 +191,11 @@ public class gameController extends java.awt.Canvas {
                         PAUSE = !PAUSE;
                         break;
                     }
+                    case KeyEvent.VK_ENTER: {
+                        if (!PLAYING) {
+                            System.exit(0);
+                        }
+                    }
                 }
             }
 
@@ -232,44 +238,59 @@ public class gameController extends java.awt.Canvas {
             long startTime = System.currentTimeMillis();
             long currentTime = 0;
 
-            while (true) {
-
+            while (PLAYING) {
                 try {
-                    g.setColor(Color.BLACK);
-                    g.fillRect(0, 0, getWidth(), getHeight());
+                    if (PACMAN.isDead()) {
+                        drawGameOver((Graphics2D) g);
+                        PLAYING = false;
+                    } else {
+                        drawMap(g);
+                        // drawNodes(g);
+                        // drawEdges(g);
+                        drawPath(g);
 
-                    drawMap(g);
-                    // drawNodes(g);
-                    // drawEdges(g);
-                    drawPath(g);
+                        currentTime = System.currentTimeMillis() - startTime;
 
-                    currentTime = System.currentTimeMillis() - startTime;
+                        switch (PACMAN.currentDirection) {
+                            case RIGTH: {
+                                PACMAN.moveRigth(currentTime);
+                                break;
+                            }
+                            case DOWN: {
+                                PACMAN.moveDown(currentTime);
+                                break;
+                            }
+                            case LEFT: {
+                                PACMAN.moveLeft(currentTime);
+                                break;
+                            }
+                            case UP: {
+                                PACMAN.moveUp(currentTime);
+                                break;
+                            }
+                        }
 
-                    switch (PACMAN.currentDirection) {
-                        case RIGTH: {
-                            PACMAN.moveRigth(currentTime);
-                            break;
-                        }
-                        case DOWN: {
-                            PACMAN.moveDown(currentTime);
-                            break;
-                        }
-                        case LEFT: {
-                            PACMAN.moveLeft(currentTime);
-                            break;
-                        }
-                        case UP: {
-                            PACMAN.moveUp(currentTime);
-                            break;
+                        PACMAN.draw(g);
+                        drawGhosts(g);
+
+                        /**
+                         * Si Pacman fue tocado por el fantasma, volver a la
+                         * posición inicial y disminuir en 1 la vida.
+                         */
+                        if (PACMAN.touchedByGhost()) {
+                            PACMAN.lifes--;
+
+                            PACMAN.setX(468);
+                            PACMAN.setY(366);
+
+                            GHOSTS[0].setX(440);
+                            GHOSTS[0].setY(200);
                         }
                     }
 
-                    PACMAN.draw(g);
-                    drawGhosts(g);
-
                     Thread.sleep(FPS);
                     getBufferStrategy().show();
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
                     System.out.println("ERROR (Game): Error en el hilo principal. \n" + Arrays.toString(e.getStackTrace()));
                 }
 
@@ -278,11 +299,12 @@ public class gameController extends java.awt.Canvas {
     }
 
     /**
-     * Cargar hilo de los fantasmas
+     * Cargar hilo de los fantasmas.
+     * Calcular el camino mínimo entre cada fantasma y Pacman.
      */
     private void loadGhostsThread() {
-        GHOSTS_THREAD = new Thread(() -> {      
-            while (true) {
+        GHOSTS_THREAD = new Thread(() -> {
+            while (PLAYING) {
                 try {
                     SORTESTPATH = GHOSTS[0].getSortestPathToPacman();
                     Thread.sleep(FPS);
@@ -295,21 +317,17 @@ public class gameController extends java.awt.Canvas {
 
     /**
      * Cargar hilo encargado del movimiento del fantasma.
+     * Movel en fantasma hasta la posición del Pacman.
      */
     private void loadMoveGhostThread() {
         MOVE_GOST = new Thread(() -> {
             long startTime = System.currentTimeMillis();
-            while (true) {
-                try {
-                    GHOSTS[0].moveGhost(startTime);
-                    // Thread.sleep(FPS);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(gameController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            while (PLAYING) {
+                
             }
         });
     }
-    
+
     /**
      * Ver si el juego está pausado.
      *
@@ -321,9 +339,11 @@ public class gameController extends java.awt.Canvas {
 
     /**
      * Obtener el camino del fantasma al Pacman
+     *
      * @return Un array de nodos
      */
     public static LinkedList<Node> getPath() {
         return SORTESTPATH;
     }
+
 }
