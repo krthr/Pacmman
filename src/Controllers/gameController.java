@@ -21,6 +21,8 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
@@ -57,7 +59,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Velocidad para los Hilos.
      */
-    private final int FPS = 10;
+    public static final int FPS = 10;
     /**
      * Mapa actual
      */
@@ -83,7 +85,7 @@ public class gameController extends java.awt.Canvas {
      * Camino con los nodos del camino más corto entre el fantasma y pacman.
      */
     private static LinkedList<Node> SORTESTPATH;
-
+    
     /**
      *
      * @param main JFrame donde el Canvas será dibujado.
@@ -144,7 +146,7 @@ public class gameController extends java.awt.Canvas {
     private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[1];
 
-        GHOSTS[0] = new Ghost(468, 280, 5, 5, "Ghost0");
+        GHOSTS[0] = new Ghost(468, 280, 7, 7, "Ghost0");
         GHOSTS[0].loadPics(0);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
@@ -279,7 +281,7 @@ public class gameController extends java.awt.Canvas {
      * Cargar hilo de los fantasmas
      */
     private void loadGhostsThread() {
-        GHOSTS_THREAD = new Thread(() -> {                        
+        GHOSTS_THREAD = new Thread(() -> {      
             while (true) {
                 try {
                     SORTESTPATH = GHOSTS[0].getSortestPathToPacman();
@@ -296,8 +298,14 @@ public class gameController extends java.awt.Canvas {
      */
     private void loadMoveGhostThread() {
         MOVE_GOST = new Thread(() -> {
+            long startTime = System.currentTimeMillis();
             while (true) {
-                GHOSTS[0].moveGhost();
+                try {
+                    GHOSTS[0].moveGhost(startTime);
+                    // Thread.sleep(FPS);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(gameController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

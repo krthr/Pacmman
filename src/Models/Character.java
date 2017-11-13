@@ -122,6 +122,7 @@ public class Character {
         if (isPaused()) {
             return;
         }
+        
         int y = this.y - vy;
         if (MAP[toI(y)][toI(x + (PIXELS / 2))] == 0
                 && MAP[toI(y)][toI(x)] == 0
