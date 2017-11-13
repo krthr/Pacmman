@@ -97,6 +97,8 @@ public class gameController extends java.awt.Canvas {
      */
     public static int MAX_POINTS = 0;
 
+    public static long startTime;
+
     /**
      *
      * @param main JFrame donde el Canvas será dibujado.
@@ -244,7 +246,7 @@ public class gameController extends java.awt.Canvas {
             createBufferStrategy(2);
             Graphics g = getBufferStrategy().getDrawGraphics();
 
-            long startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
             long currentTime = 0;
 
             while (PLAYING) {
@@ -259,7 +261,7 @@ public class gameController extends java.awt.Canvas {
                         drawMap(g);
                         // drawController.drawNodes(g);
                         // drawController.drawEdges(g);
-                        drawController.drawPath(g);
+                        // drawController.drawPath(g);
 
                         currentTime = System.currentTimeMillis() - startTime;
 
@@ -285,6 +287,7 @@ public class gameController extends java.awt.Canvas {
                         switch (GHOSTS[0].currentDirection) {
                             case RIGTH: {
                                 GHOSTS[0].moveRigth(currentTime);
+
                                 break;
                             }
                             case DOWN: {
@@ -363,44 +366,66 @@ public class gameController extends java.awt.Canvas {
                 try {
                     LinkedList<Node> temp = getPath();
                     Node pos = GHOSTS[0].actualNode();
+                    int x = GHOSTS[0].X(), y = GHOSTS[0].Y();
 
                     if (GHOSTS[0].actualNode() == PACMAN.actualNode()) {
                         continue;
                     }
 
-                    if (temp == null || temp.size() == 1) {
+                    if (temp == null || temp.size() == 1 || pos == null) {
                         continue;
                     }
 
-                    System.out.println("---");
-                    System.out.println(pos);
-                    System.out.println(temp.get(1));
-
+//                    System.out.println("---");
+//                    System.out.println(pos);
+//                    System.out.println(temp.get(1));
+//                    System.out.println(x);
                     if (pos.X() == temp.get(1).X()) {
-                        System.out.println("En Y");
+//                        System.out.println("En Y");
 
                         if (pos.Y() > temp.get(1).Y()) {
-                            System.out.println("^");
+
+                            if (x + PIXELS > temp.get(1).X() + PIXELS) {
+                                GHOSTS[0].moveLeft(System.currentTimeMillis() - startTime);
+                            } else if (x < temp.get(1).X()) {
+                                GHOSTS[0].moveRigth(System.currentTimeMillis() - startTime);
+                            }
+
                             GHOSTS[0].currentDirection = UP;
                         } else {
-                            System.out.println("^^");
+
+                            if (x < pos.X()) {
+                                GHOSTS[0].moveRigth(System.currentTimeMillis() - startTime);
+                            } else if (x + PIXELS > temp.get(1).X() + PIXELS) {
+                                GHOSTS[0].moveLeft(System.currentTimeMillis() - startTime);
+                            }
+
                             GHOSTS[0].currentDirection = DOWN;
-                        }
-
-                    } else if (pos.Y() == temp.get(1).Y()) {
-                        System.out.println("En X");
-
-                        if (pos.X() > temp.get(1).X() - PIXELS) {
-                            System.out.println("<");
-                            GHOSTS[0].currentDirection = LEFT;
-                        } else {
-                            System.out.println(">");
-                            GHOSTS[0].currentDirection = RIGTH;
                         }
                     }
 
-                    if (pos == temp.get(1)) {
-                        GHOSTS[0].currentDirection = NONE;
+                    if (pos.Y() == temp.get(1).Y()) {
+//                        System.out.println("En X");
+
+                        if (pos.X() > temp.get(1).X() - PIXELS) {
+
+                            if (y < pos.Y()) {
+                                GHOSTS[0].moveDown(System.currentTimeMillis() - startTime);
+                            } else if (y + PIXELS > temp.get(1).Y()) {
+                                GHOSTS[0].moveUp(System.currentTimeMillis() - startTime);
+                            }
+
+                            GHOSTS[0].currentDirection = LEFT;
+                        } else {
+
+                            if (y > pos.Y()) {
+                                GHOSTS[0].moveUp(System.currentTimeMillis() - startTime);
+                            } else if (y < temp.get(1).Y()) {
+                                GHOSTS[0].moveDown(System.currentTimeMillis() - startTime);
+                            }
+
+                            GHOSTS[0].currentDirection = RIGTH;
+                        }
                     }
 
                     Thread.sleep(FPS);

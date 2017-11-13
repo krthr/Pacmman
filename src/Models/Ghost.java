@@ -60,12 +60,8 @@ public class Ghost extends Character {
      * @return Lista de nodos que componen el camino.
      */
     public LinkedList getSortestPathToPacman() {
-        Node position = actualNode();
-        dijktra().execute(position);
-
-        LinkedList<Node> way = dijktra().getPath(PACMAN.actualNode());
-
-        return way;
+        dijktra().execute(this.actualNode());
+        return dijktra().getPath(PACMAN.actualNode());
     }
 
     /**

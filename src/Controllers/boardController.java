@@ -102,7 +102,7 @@ public class boardController extends javax.swing.JFrame {
         arrowOp2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("P A C M M  A N");
+        setTitle("P A C M M  A N -  github/krthr");
         setAlwaysOnTop(true);
         setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(1000, 630));
