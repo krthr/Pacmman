@@ -1,6 +1,7 @@
 package Controllers;
 
 import static Controllers.gameController.MAP;
+import static Controllers.gameController.MAX_POINTS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
 import static Controllers.mapController.LEVEL1;
@@ -87,11 +88,13 @@ public class graphController {
         Random rn = new Random();
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
-                int temp = rn.nextInt((15 - 1) + 1) + 1;
+                int temp = rn.nextInt((25 - 1) + 1) + 1;
                 
                 if (LEVEL1[i][j] == 0) {
-                    if (temp == 3) addNode(j * PRO_X, i * PRO_Y, true);
-                    else addNode(j * PRO_X, i * PRO_Y, false);
+                    if (temp == 3) {
+                        MAX_POINTS += 10;
+                        addNode(j * PRO_X, i * PRO_Y, true);
+                    } else addNode(j * PRO_X, i * PRO_Y, false);
                 }
             }
         }

@@ -4,6 +4,7 @@ import static Controllers.drawController.drawGameOver;
 import static Controllers.drawController.drawGhosts;
 import static Controllers.drawController.drawMap;
 import static Controllers.drawController.drawPath;
+import static Controllers.drawController.drawWin;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
 import static Models.Pacman.DOWN;
@@ -21,8 +22,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
@@ -83,7 +82,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Camino con los nodos del camino más corto entre el fantasma y pacman.
      */
-    private static LinkedList<Node> SORTESTPATH;
+    private static LinkedList<Node> SHORTESTPATH;
     /**
      * ¿El juego acabó?
      */
@@ -92,6 +91,10 @@ public class gameController extends java.awt.Canvas {
      * Puntos que tiene el jugados.
      */
     private static int POINTS = 0;
+    /**
+     * Máxima cantidad de puntos.
+     */
+    public static int MAX_POINTS = 0;
 
     /**
      *
@@ -249,11 +252,14 @@ public class gameController extends java.awt.Canvas {
                     if (PACMAN.isDead()) {
                         drawGameOver((Graphics2D) g, POINTS);
                         PLAYING = false;
+                    } else if (POINTS == MAX_POINTS) {
+                        drawWin((Graphics2D) g, POINTS);
+                        PLAYING = false;
                     } else {
                         drawMap(g);
-                        // drawNodes(g);
-                        // drawEdges(g);
-                        drawPath(g);
+                        // drawController.drawNodes(g);
+                        // drawController.drawEdges(g);
+                        drawController.drawPath(g);
 
                         currentTime = System.currentTimeMillis() - startTime;
 
@@ -275,7 +281,7 @@ public class gameController extends java.awt.Canvas {
                                 break;
                             }
                         }
-                        
+
                         if (PACMAN.actualNode() != null && PACMAN.actualNode().isCoin()) {
                             PACMAN.actualNode().setCoint();
                             POINTS += 10;
@@ -310,35 +316,45 @@ public class gameController extends java.awt.Canvas {
     }
 
     /**
-     * Cargar hilo de los fantasmas.
-     * Calcular el camino mínimo entre cada fantasma y Pacman.
+     * Cargar hilo de los fantasmas. Calcular el camino mínimo entre cada
+     * fantasma y Pacman.
      */
     private void loadGhostsThread() {
         GHOSTS_THREAD = new Thread(() -> {
             while (PLAYING) {
                 try {
-                    SORTESTPATH = GHOSTS[0].getSortestPathToPacman();
+                    SHORTESTPATH = GHOSTS[0].getSortestPathToPacman();
                     Thread.sleep(FPS);
                 } catch (InterruptedException e) {
-                    
+
                 }
             }
         });
     }
 
     /**
-     * Cargar hilo encargado del movimiento del fantasma.
-     * Movel en fantasma hasta la posición del Pacman.
+     * Cargar hilo encargado del movimiento del fantasma. Movel en fantasma
+     * hasta la posición del Pacman.
      */
     private void loadMoveGhostThread() {
         MOVE_GOST = new Thread(() -> {
             long startTime = System.currentTimeMillis();
+
+            int i = 0;
             while (PLAYING) {
+                if (SHORTESTPATH == null) continue;
                 
+                System.out.println(SHORTESTPATH);
                 if (PACMAN.actualNode() != GHOSTS[0].actualNode()) {
-                    System.out.println("Moviendo...");
+                    if (GHOSTS[0].X() == SHORTESTPATH.get(0).X()) {
+                        System.out.println("Mover en Y");
+                    }
+
+                    if (GHOSTS[0].Y() == SHORTESTPATH.get(0).Y()) {
+                        System.out.println("Mover en X");
+                    }
                 }
-                
+
             }
         });
     }
@@ -358,7 +374,7 @@ public class gameController extends java.awt.Canvas {
      * @return Un array de nodos
      */
     public static LinkedList<Node> getPath() {
-        return SORTESTPATH;
+        return SHORTESTPATH;
     }
 
 }

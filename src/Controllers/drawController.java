@@ -171,18 +171,38 @@ public class drawController {
 
     /**
      * Dibujar la pantalla de juego terminado.
-     * @param g
+     * @param g Graficos donde se dibujará
+     * @param point Puntos obtenidos
      */
     public static void drawGameOver(Graphics2D g, int point) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
         g.setColor(Color.YELLOW);
         g.setFont(new Font("Consolas", Font.PLAIN, 30));
         g.drawString("Puntos: " + point, GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 50);
         g.setFont(new Font("Consolas", Font.PLAIN, 38));
         g.setColor(Color.WHITE);
-        g.drawString("G A M E   O V E R", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2);
+        g.drawString("G A M E   O V E R !", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2);
+        g.setColor(Color.GRAY);
+        g.setFont(new Font("Consolas", Font.PLAIN, 15));
+        g.drawString("Presiona ENTER para terminar el juego.", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 100);
+    }
+    
+    /**
+     * Dibujar la pantalla de juego ganado.
+     * @param g Donde se dibujará
+     * @param point Puntos obtenidos.
+     */
+    public static void drawWin(Graphics2D g, int point) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("Consolas", Font.PLAIN, 30));
+        g.drawString("Puntos: " + point, GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 50);
+        g.setFont(new Font("Consolas", Font.PLAIN, 38));
+        g.setColor(Color.WHITE);
+        g.drawString("Y O U  W I N !", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2);
+        g.setColor(Color.GRAY);
         g.setFont(new Font("Consolas", Font.PLAIN, 15));
         g.drawString("Presiona ENTER para terminar el juego.", GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2 + 100);
     }
