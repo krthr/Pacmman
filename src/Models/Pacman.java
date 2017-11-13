@@ -67,7 +67,9 @@ public class Pacman extends Character {
      */
     public boolean touchedByGhost() {
         for (Ghost temp : GHOSTS) {
-            if (temp.actualNode() == this.actualNode()) {
+            if (temp.actualNode() != null && 
+                    this.actualNode() != null && 
+                    temp.actualNode() == this.actualNode()) {
                 return true;
             }
         }

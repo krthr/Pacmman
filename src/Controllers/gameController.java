@@ -3,7 +3,6 @@ package Controllers;
 import static Controllers.drawController.drawGameOver;
 import static Controllers.drawController.drawGhosts;
 import static Controllers.drawController.drawMap;
-import static Controllers.drawController.drawPath;
 import static Controllers.drawController.drawWin;
 import static Controllers.graphController.loadGraph;
 import static Controllers.mapController.*;
@@ -22,6 +21,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase encargada de manejar la lógica y casi todo lo correspondiente al juego.
@@ -156,13 +157,13 @@ public class gameController extends java.awt.Canvas {
     private void loadCharacters(int w, int h) throws Exception {
         GHOSTS = new Ghost[1];
 
-        GHOSTS[0] = new Ghost(440, 200, 7, 7, "Ghost0");
+        GHOSTS[0] = new Ghost(440 + PIXELS / 4, 200 + PIXELS / 4, 2, 2, "Ghost0");
         GHOSTS[0].loadPics(0);
 
         String[] names = {"arriba", "der", "abajo", "izq"};
         PACMAN = new Pacman(468, 366, 3, 3, "Pacman");
         PACMAN.loadPics(names);
-        PACMAN.currentDirection = RIGTH;
+//        PACMAN.currentDirection = RIGTH;
     }
 
     /**
@@ -282,6 +283,25 @@ public class gameController extends java.awt.Canvas {
                             }
                         }
 
+                        switch (GHOSTS[0].currentDirection) {
+                            case RIGTH: {
+                                GHOSTS[0].moveRigth(currentTime);
+                                break;
+                            }
+                            case DOWN: {
+                                GHOSTS[0].moveDown(currentTime);
+                                break;
+                            }
+                            case LEFT: {
+                                GHOSTS[0].moveLeft(currentTime);
+                                break;
+                            }
+                            case UP: {
+                                GHOSTS[0].moveUp(currentTime);
+                                break;
+                            }
+                        }
+
                         if (PACMAN.actualNode() != null && PACMAN.actualNode().isCoin()) {
                             PACMAN.actualNode().setCoint();
                             POINTS += 10;
@@ -340,21 +360,52 @@ public class gameController extends java.awt.Canvas {
         MOVE_GOST = new Thread(() -> {
             long startTime = System.currentTimeMillis();
 
-            int i = 0;
-            while (PLAYING) {
-                if (SHORTESTPATH == null) continue;
-                
-                System.out.println(SHORTESTPATH);
-                if (PACMAN.actualNode() != GHOSTS[0].actualNode()) {
-                    if (GHOSTS[0].X() == SHORTESTPATH.get(0).X()) {
-                        System.out.println("Mover en Y");
+            while (true) {
+                try {
+                    LinkedList<Node> temp = getPath();
+                    Node pos = GHOSTS[0].actualNode();
+
+                    if (GHOSTS[0].actualNode() == PACMAN.actualNode()) {
+                        continue;
                     }
 
-                    if (GHOSTS[0].Y() == SHORTESTPATH.get(0).Y()) {
-                        System.out.println("Mover en X");
+                    if (temp == null || temp.size() == 1) {
+                        continue;
                     }
+                    
+                    System.out.println("---");
+                    System.out.println(pos);
+                    System.out.println(temp.get(1));
+                    
+                    if (pos.X() == temp.get(1).X()) {
+                        System.out.println("En Y");
+                        
+                        if (pos.Y() > temp.get(1).Y()) {
+                            System.out.println("^");
+                            GHOSTS[0].currentDirection = UP;
+                        } else {
+                            System.out.println("^^");
+                            GHOSTS[0].currentDirection = DOWN;
+                        }
+                        
+                    } else if (pos.Y() == temp.get(1).Y()) {
+                        System.out.println("En X");
+                        
+                        if (pos.X() > temp.get(1).X() - PIXELS) {
+                            System.out.println("<");
+                            GHOSTS[0].currentDirection = LEFT;
+                        } else {
+                            System.out.println(">");
+                            GHOSTS[0].currentDirection = RIGTH;
+                        }
+                    }
+                    
+                    if (pos == temp.get(1)) GHOSTS[0].currentDirection = NONE;
+
+                    Thread.sleep(FPS);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(gameController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             }
         });
     }

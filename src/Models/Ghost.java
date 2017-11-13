@@ -1,14 +1,17 @@
 package Models;
 
 import Controllers.animationController;
-import Controllers.gameController;
-import static Controllers.gameController.FPS;
+import static Controllers.gameController.MAP;
 import static Controllers.gameController.PACMAN;
 import static Controllers.gameController.PIXELS;
-import static Controllers.gameController.PLAYING;
+import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
-import static Controllers.gameController.getPath;
+import static Controllers.gameController.isPaused;
 import static Controllers.graphController.dijktra;
+import static Models.Character.DOWN;
+import static Models.Character.LEFT;
+import static Models.Character.RIGTH;
+import static Models.Character.UP;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
 
@@ -63,6 +66,100 @@ public class Ghost extends Character {
         LinkedList<Node> way = dijktra().getPath(PACMAN.actualNode());
 
         return way;
+    }
+
+    /**
+     * Mover a la derecha.
+     *
+     * @param time (?)
+     */
+    @Override
+    public void moveRigth(long time) {
+        if (isPaused()) {
+            return;
+        }
+        
+        int x = this.x + PIXELS + vx;
+        if (MAP[xToI(y + (PIXELS / 2))][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y + PIXELS)][xToI(x)] == 0) {
+            this.x += vx;
+        }
+
+        currentAnimation = RIGTH;
+        animations[RIGTH].update(time);
+    }
+
+    /**
+     * Mover a la izquierda.
+     *
+     * @param time (?)
+     */
+    @Override
+    public void moveLeft(long time) {
+        if (isPaused()) {
+            return;
+        }
+        int x = this.x - vx;
+        if (MAP[xToI(y + (PIXELS / 2))][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y + PIXELS)][xToI(x)] == 0) {
+            this.x -= vx;
+        }
+
+        currentAnimation = LEFT;
+        animations[LEFT].update(time);
+    }
+
+    /**
+     * Mover a arriba.
+     *
+     * @param time (?)
+     */
+    @Override
+    public void moveUp(long time) {
+        if (isPaused()) {
+            return;
+        }
+
+        int y = this.y - vy;
+        if (MAP[xToI(y)][xToI(x + (PIXELS / 2))] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x + PIXELS - 2)] == 0) {
+            this.y -= vy;
+        }
+
+        currentAnimation = UP;
+        animations[UP].update(time);
+    }
+
+    /**
+     * Mover abajo.
+     *
+     * @param time (?)
+     */
+    @Override
+    public void moveDown(long time) {
+        if (isPaused()) {
+            return;
+        }
+        int y = this.y + PIXELS + vy;
+        if (MAP[xToI(y)][xToI(x + (PIXELS / 2))] == 0
+                && MAP[xToI(y)][xToI(x)] == 0
+                && MAP[xToI(y)][xToI(x + PIXELS - 3)] == 0) {
+            this.y += vy;
+        }
+
+        currentAnimation = DOWN;
+        animations[DOWN].update(time);
+    }
+
+    private int xToI(int n) {
+        return n / PRO_X;
+    }
+
+    private int yToI(int n) {
+        return n / PRO_Y;
     }
 
 }

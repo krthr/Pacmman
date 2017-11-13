@@ -86,15 +86,13 @@ public class graphController {
      */
     private static void loadNodes() {
         Random rn = new Random();
+
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
-                int temp = rn.nextInt((25 - 1) + 1) + 1;
-                
                 if (LEVEL1[i][j] == 0) {
-                    if (temp == 3) {
-                        MAX_POINTS += 10;
-                        addNode(j * PRO_X, i * PRO_Y, true);
-                    } else addNode(j * PRO_X, i * PRO_Y, false);
+                    boolean coin = rn.nextInt((30) - 1 + 1) + 1 == 1;
+                    if (coin) MAX_POINTS += 10;
+                    addNode(j * PRO_X, i * PRO_Y, coin);
                 }
             }
         }

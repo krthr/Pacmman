@@ -32,7 +32,7 @@ public class Character {
 
     animationController[] animations;
     animationController[] death_animations;
-    int x, y, vx, vy;
+    public int x, y, vx, vy;
     String path;
     public int currentAnimation, currentDirection;
 
@@ -122,7 +122,7 @@ public class Character {
         if (isPaused()) {
             return;
         }
-        
+
         int y = this.y - vy;
         if (MAP[xToI(y)][xToI(x + (PIXELS / 2))] == 0
                 && MAP[xToI(y)][xToI(x)] == 0
@@ -157,7 +157,7 @@ public class Character {
     private int xToI(int n) {
         return n / PRO_X;
     }
-    
+
     private int yToI(int n) {
         return n / PRO_Y;
     }
@@ -168,7 +168,7 @@ public class Character {
      * @param g Gráfico donde se dibujará.
      */
     public void draw(Graphics g) {
-        g.drawImage(animations[currentAnimation].getImage(), x, y, PIXELS, PIXELS,null);
+        g.drawImage(animations[currentAnimation].getImage(), x, y, PIXELS, PIXELS, null);
     }
 
     /**
@@ -191,7 +191,8 @@ public class Character {
     private Node getNode(int x, int y) {
         Node se = null;
         for (Node temp : getNodes()) {
-            if (x > temp.X() && y > temp.Y() && x < temp.X() + PRO_X && y < temp.Y() + PRO_Y) {
+            if (x > temp.X() && y > temp.Y()
+                    && x < temp.X() + PRO_X  && y < temp.Y() + PRO_Y) {
                 se = temp;
                 break;
             }
@@ -202,6 +203,7 @@ public class Character {
 
     /**
      * Asignar valor de la posición en X
+     *
      * @param x Valor de la posición en X
      */
     public void setX(int x) {
@@ -210,12 +212,11 @@ public class Character {
 
     /**
      * Asignar valor de la posición en Y
+     *
      * @param y Valor de la posición en Y
      */
     public void setY(int y) {
         this.y = y;
     }
-    
-    
 
 }
