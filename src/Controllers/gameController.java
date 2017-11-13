@@ -210,7 +210,6 @@ public class gameController extends java.awt.Canvas {
             }
 
             @Override
-
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP: {
@@ -372,14 +371,14 @@ public class gameController extends java.awt.Canvas {
                     if (temp == null || temp.size() == 1) {
                         continue;
                     }
-                    
+
                     System.out.println("---");
                     System.out.println(pos);
                     System.out.println(temp.get(1));
-                    
+
                     if (pos.X() == temp.get(1).X()) {
                         System.out.println("En Y");
-                        
+
                         if (pos.Y() > temp.get(1).Y()) {
                             System.out.println("^");
                             GHOSTS[0].currentDirection = UP;
@@ -387,10 +386,10 @@ public class gameController extends java.awt.Canvas {
                             System.out.println("^^");
                             GHOSTS[0].currentDirection = DOWN;
                         }
-                        
+
                     } else if (pos.Y() == temp.get(1).Y()) {
                         System.out.println("En X");
-                        
+
                         if (pos.X() > temp.get(1).X() - PIXELS) {
                             System.out.println("<");
                             GHOSTS[0].currentDirection = LEFT;
@@ -399,8 +398,10 @@ public class gameController extends java.awt.Canvas {
                             GHOSTS[0].currentDirection = RIGTH;
                         }
                     }
-                    
-                    if (pos == temp.get(1)) GHOSTS[0].currentDirection = NONE;
+
+                    if (pos == temp.get(1)) {
+                        GHOSTS[0].currentDirection = NONE;
+                    }
 
                     Thread.sleep(FPS);
                 } catch (InterruptedException ex) {

@@ -13,7 +13,13 @@ import Models.Node;
  */
 public class dijkstraController {
 
+    /**
+     * Lista de nodos.
+     */
     private final List<Node> nodes;
+    /**
+     * Lista de aristas.
+     */
     private final List<Edge> edges;
     private Set<Node> settledNodes;
     private Set<Node> unSettledNodes;
@@ -30,6 +36,7 @@ public class dijkstraController {
 
     /**
      * Ejecutar Dijkstra.
+     *
      * @param source Nodo desde donde se partirá.
      */
     public void execute(Node source) {
@@ -48,6 +55,7 @@ public class dijkstraController {
     }
 
     /**
+     * Encontrar las distancias mínimas entre los nodos.
      *
      * @param node
      */
@@ -66,10 +74,11 @@ public class dijkstraController {
     }
 
     /**
+     * Obtener distancia entre nodos.
      *
-     * @param node
-     * @param target
-     * @return
+     * @param node Nodo inicial.
+     * @param target Nodo final.
+     * @return El peso de una arista.
      */
     private int getDistance(Node node, Node target) {
         for (Edge edge : edges) {
@@ -83,6 +92,7 @@ public class dijkstraController {
 
     /**
      * Obtener los vecinos de un nodo.
+     *
      * @param node
      * @return
      */
@@ -116,10 +126,21 @@ public class dijkstraController {
         return minimum;
     }
 
+    /**
+     * Comprobar si un nodo ya fue seleccionado.
+     *
+     * @param vertex Nodo
+     * @return Falso o verdadero
+     */
     private boolean isSettled(Node vertex) {
         return settledNodes.contains(vertex);
     }
 
+    /**
+     *
+     * @param destination
+     * @return
+     */
     private int getShortestDistance(Node destination) {
         Integer d = distance.get(destination);
         if (d == null) {

@@ -3,7 +3,6 @@ package Controllers;
 import static Controllers.boardController.GAME_HEIGHT;
 import static Controllers.boardController.GAME_WIDTH;
 import static Controllers.gameController.GHOSTS;
-import static Controllers.gameController.MAP;
 import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
@@ -20,7 +19,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.text.AttributedCharacterIterator;
 import java.util.Random;
 import javax.swing.ImageIcon;
 
@@ -32,10 +30,13 @@ import javax.swing.ImageIcon;
 public class drawController {
 
     /**
-     *
+     * Imágen de la pared.
      */
     public final static Image WALL_IMG = (new ImageIcon(drawController.class.getClass()
             .getResource("/Assets/wall.jpg"))).getImage();
+    /**
+     * Imágenes para el camino.
+     */
     public final static Image[] WAY_IMG = {
         (new ImageIcon(drawController.class.getClass()
         .getResource("/Assets/way.jpg"))).getImage(),
@@ -146,7 +147,7 @@ public class drawController {
     /**
      * Dibujar todos los fantasma en el tablero.
      *
-     * @param g
+     * @param g Graficos donde se dibujará
      */
     public static void drawGhosts(Graphics g) {
         for (Ghost temp : GHOSTS) {

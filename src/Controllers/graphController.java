@@ -40,7 +40,9 @@ public class graphController {
      * Color de los nodos del grafo.
      */
     public static final Color NODES_COLOR = Color.RED;
-
+    /**
+     * Objeto para la utilización de Dijkstra.
+     */
     private static dijkstraController DIJKSTRA;
 
     private static int N_ID = 0;
@@ -89,9 +91,11 @@ public class graphController {
 
         for (int i = 0; i < N_Y; i++) {
             for (int j = 0; j < N_X; j++) {
-                if (LEVEL1[i][j] == 0) {
+                if (MAP[i][j] == 0) {
                     boolean coin = rn.nextInt((30) - 1 + 1) + 1 == 1;
-                    if (coin) MAX_POINTS += 10;
+                    if (coin) {
+                        MAX_POINTS += 10;
+                    }
                     addNode(j * PRO_X, i * PRO_Y, coin);
                 }
             }
@@ -214,6 +218,13 @@ public class graphController {
         return null;
     }
 
+    /**
+     * Buscar nodo por ID.
+     *
+     * @param id ID del nodo a buscar.
+     * @return NULL si no fue encontrado el nodo o si la lista de nodos es NULL.
+     * Retorna el nodo si fue encontrado.
+     */
     public static Node searchNode(int id) {
         if (NODES == null) {
             return null;

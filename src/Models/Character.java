@@ -6,7 +6,6 @@ import static Controllers.gameController.PIXELS;
 import static Controllers.gameController.PRO_X;
 import static Controllers.gameController.PRO_Y;
 import static Controllers.graphController.getNodes;
-import static Controllers.graphController.searchNode;
 import static Models.Pacman.DOWN;
 import static Models.Pacman.LEFT;
 import static Models.Pacman.RIGTH;

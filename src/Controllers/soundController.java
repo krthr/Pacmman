@@ -25,7 +25,7 @@ public class soundController {
 
     public soundController() {
         System.out.println(THEME);
-        MAIN_THEME = THEME = "BeepBox-Song.wav";        
+        MAIN_THEME = THEME = "BeepBox-Song.wav";
     }
 
     /**
@@ -45,7 +45,7 @@ public class soundController {
      * Inicializar hilo del reproductor.
      */
     public void play() {
-        
+
         System.out.println(THEME);
         File audioFile = new File(getClass().getResource("/Assets/Sounds/" + THEME).getFile());
 
@@ -66,21 +66,17 @@ public class soundController {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
                 }
             }
 
             audioClip.close();
 
         } catch (UnsupportedAudioFileException ex) {
-            System.out.println("The specified audio file is not supported.");
-            ex.printStackTrace();
+            System.out.println("The specified audio file is not supported. \n" + ex);
         } catch (LineUnavailableException ex) {
-            System.out.println("Audio line for playing back is unavailable.");
-            ex.printStackTrace();
+            System.out.println("Audio line for playing back is unavailable. \n" + ex);
         } catch (IOException ex) {
-            System.out.println("Error playing the audio file.");
-            ex.printStackTrace();
+            System.out.println("Error playing the audio file. \n" + ex);
         }
     }
 
