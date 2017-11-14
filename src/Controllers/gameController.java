@@ -74,7 +74,7 @@ public class gameController extends java.awt.Canvas {
     /**
      * Número de vidas en el juego.
      */
-    public static int LIFES = 3;
+    public static int LIFES = 1;
     /**
      * Tamaño en pixeles de los sprites.
      */
@@ -259,9 +259,9 @@ public class gameController extends java.awt.Canvas {
                         PLAYING = false;
                     } else {
                         drawBoard(g, POINTS);
-                        // drawController.drawNodes(g);
-                        // drawController.drawEdges(g);
-                        // drawController.drawPath(g);
+//                        drawController.drawNodes(g);
+//                        drawController.drawEdges(g);
+//                        drawController.drawPath(g);
 
                         currentTime = System.currentTimeMillis() - startTime;
 
